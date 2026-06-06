@@ -16,6 +16,16 @@ export interface Booking {
   status: BookingStatus;
   createdAt: string;
   updatedAt: string;
+  ride?: {
+    originCity: string;
+    destinationCity: string;
+    departureAt: string;
+    pricePerSeat: number;
+    driverName: string;
+    driverPhotoUrl?: string;
+    driverRating: number;
+    driverPhone?: string;
+  };
 }
 
 export interface Rating {

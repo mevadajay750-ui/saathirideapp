@@ -1,8 +1,10 @@
 export { Button } from './Button';
 export type { ButtonVariant, ButtonSize } from './Button';
 export { Input } from './Input';
-export { Avatar } from './Avatar';
-export { LoadingSpinner } from './LoadingSpinner';
+export { OTPInput } from './OTPInput';
+export { PhoneInput } from './PhoneInput';
+export { BottomSheet } from './BottomSheet';
+export type { BottomSheetRef } from './BottomSheet';
 export {
   Display,
   H1,

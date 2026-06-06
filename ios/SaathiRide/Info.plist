@@ -35,6 +35,10 @@
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string/>
+	<key>NSCameraUsageDescription</key>
+	<string>SaathiRide needs camera access to set your profile photo</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>SaathiRide needs photo library access to set your profile photo</string>
 	<key>RCTNewArchEnabled</key>
 	<true/>
 	<key>UIBackgroundModes</key>

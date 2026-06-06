@@ -1,5 +1,7 @@
+import type { CompositeNavigationProp, NavigatorScreenParams } from '@react-navigation/native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
-import type { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
+import type { BottomTabNavigationProp, BottomTabScreenProps } from '@react-navigation/bottom-tabs';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 export type AuthStackParamList = {
   Welcome: undefined;
@@ -18,7 +20,6 @@ export type DriverTabParamList = {
 
 export type PassengerTabParamList = {
   PassengerHome: undefined;
-  SearchRide: undefined;
   MyBookings: undefined;
   Profile: undefined;
 };
@@ -26,10 +27,21 @@ export type PassengerTabParamList = {
 export type RootStackParamList = {
   Auth: undefined;
   DriverTabs: undefined;
-  PassengerTabs: undefined;
+  PassengerTabs: NavigatorScreenParams<PassengerTabParamList> | undefined;
   RideDetail: { rideId: string };
+  SearchResults: {
+    originCity: string;
+    destinationCity: string;
+    originCityId: string;
+    destinationCityId: string;
+    date: string;
+    seats: number;
+  };
+  RideBooking: { rideId: string; seats: number };
   BookingDetail: { bookingId: string };
   RateRide: { rideId: string; rateeId: string; rateeName: string };
+  EditProfile: undefined;
+  Notifications: undefined;
 };
 
 export type AuthScreenProps<T extends keyof AuthStackParamList> = NativeStackScreenProps<
@@ -50,4 +62,14 @@ export type DriverTabScreenProps<T extends keyof DriverTabParamList> = BottomTab
 export type PassengerTabScreenProps<T extends keyof PassengerTabParamList> = BottomTabScreenProps<
   PassengerTabParamList,
   T
+>;
+
+export type DriverTabNavigation = CompositeNavigationProp<
+  BottomTabNavigationProp<DriverTabParamList>,
+  NativeStackNavigationProp<RootStackParamList>
+>;
+
+export type PassengerTabNavigation = CompositeNavigationProp<
+  BottomTabNavigationProp<PassengerTabParamList>,
+  NativeStackNavigationProp<RootStackParamList>
 >;

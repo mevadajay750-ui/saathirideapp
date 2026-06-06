@@ -1,37 +1,74 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import Icon from 'react-native-vector-icons/Ionicons';
+import { Text, View, StyleSheet } from 'react-native';
 import { PassengerTabParamList } from './types';
-import { Colors } from '@/theme';
 import PassengerHomeScreen from '@/screens/passenger/PassengerHomeScreen';
-import SearchRideScreen from '@/screens/passenger/SearchRideScreen';
 import MyBookingsScreen from '@/screens/passenger/MyBookingsScreen';
 import ProfileScreen from '@/screens/shared/ProfileScreen';
+import { Colors, FontFamily, FontSize, Spacing } from '@/theme';
+import { NotificationBadge } from '@/components/notifications/NotificationBadge';
+import { useNotificationStore } from '@/hooks/useNotificationStore';
 
 const Tab = createBottomTabNavigator<PassengerTabParamList>();
 
+const TAB_ICONS: Record<string, { active: string; inactive: string }> = {
+  PassengerHome: { active: '🏠', inactive: '🏠' },
+  MyBookings: { active: '🎟️', inactive: '🎟️' },
+  Profile: { active: '👤', inactive: '👤' },
+};
+
 export default function PassengerNavigator() {
+  const unreadCount = useNotificationStore((s) => s.unreadCount);
+
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
         headerShown: false,
+        tabBarStyle: styles.tabBar,
         tabBarActiveTintColor: Colors.primary,
-        tabBarInactiveTintColor: Colors.textMuted,
-        tabBarIcon: ({ color, size }) => {
-          const icons: Record<keyof PassengerTabParamList, string> = {
-            PassengerHome: 'home-outline',
-            SearchRide: 'search-outline',
-            MyBookings: 'ticket-outline',
-            Profile: 'person-outline',
-          };
-          return <Icon name={icons[route.name]} size={size} color={color} />;
-        },
+        tabBarInactiveTintColor: Colors.gray400,
+        tabBarLabelStyle: styles.tabLabel,
+        tabBarIcon: ({ focused }) => (
+          <View>
+            <Text style={styles.tabIcon}>
+              {focused ? TAB_ICONS[route.name]?.active : TAB_ICONS[route.name]?.inactive}
+            </Text>
+            {route.name === 'Profile' && unreadCount > 0 && (
+              <NotificationBadge count={unreadCount} />
+            )}
+          </View>
+        ),
       })}
     >
-      <Tab.Screen name="PassengerHome" component={PassengerHomeScreen} options={{ title: 'Home' }} />
-      <Tab.Screen name="SearchRide" component={SearchRideScreen} options={{ title: 'Search' }} />
-      <Tab.Screen name="MyBookings" component={MyBookingsScreen} options={{ title: 'Bookings' }} />
-      <Tab.Screen name="Profile" component={ProfileScreen} />
+      <Tab.Screen
+        name="PassengerHome"
+        component={PassengerHomeScreen}
+        options={{ tabBarLabel: 'Home' }}
+      />
+      <Tab.Screen
+        name="MyBookings"
+        component={MyBookingsScreen}
+        options={{ tabBarLabel: 'Bookings' }}
+      />
+      <Tab.Screen name="Profile" component={ProfileScreen} options={{ tabBarLabel: 'Profile' }} />
     </Tab.Navigator>
   );
 }
+
+const styles = StyleSheet.create({
+  tabBar: {
+    backgroundColor: Colors.surface,
+    borderTopWidth: 0.5,
+    borderTopColor: Colors.border,
+    paddingBottom: Spacing.sm,
+    paddingTop: Spacing.xs,
+    height: 60,
+  },
+  tabLabel: {
+    fontFamily: FontFamily.bodyMedium,
+    fontSize: FontSize.xs,
+  },
+  tabIcon: {
+    fontSize: 22,
+  },
+});

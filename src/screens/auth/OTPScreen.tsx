@@ -14,9 +14,11 @@ import { Colors, FontFamily, FontSize, Spacing, BorderRadius, TextStyles } from 
 import { Button } from '@/components/common';
 import { OTPInput } from '@/components/common/OTPInput';
 import { useAuth } from '@/hooks/useAuth';
+import { useAuthStore } from '@/store/auth.store';
 import { useCountdown } from '@/hooks/useCountdown';
 import { formatPhone } from '@/utils/formatters';
-import { sendOTP } from '@/services/auth.service';
+import { isMockOtpActive, sendOTP } from '@/services/auth.service';
+import { DEV_OTP_CODE } from '@/config/dev.auth';
 import type { AuthScreenProps } from '@/navigation/types';
 
 type Props = AuthScreenProps<'OTP'>;
@@ -49,7 +51,8 @@ export default function OTPScreen({ navigation, route }: Props) {
         return;
       }
 
-      if (result.isNewUser) {
+      const user = useAuthStore.getState().user;
+      if (result.needsSetup || !user?.name?.trim()) {
         navigation.navigate('ProfileSetup');
       }
     },
@@ -152,11 +155,19 @@ export default function OTPScreen({ navigation, route }: Props) {
             </TouchableOpacity>
           </View>
 
-          {__DEV__ && (
+          {__DEV__ && isMockOtpActive() && (
             <View style={styles.devNote}>
               <Text style={styles.devNoteText}>
-                Dev: Use Firebase test phone numbers{'\n'}
-                configured in Firebase Console → Auth → Sign-in method → Phone
+                Dev mode: enter OTP {DEV_OTP_CODE} (no SMS is sent).
+              </Text>
+            </View>
+          )}
+
+          {__DEV__ && !isMockOtpActive() && (
+            <View style={styles.devNote}>
+              <Text style={styles.devNoteText}>
+                Dev: add test phone numbers in Firebase Console → Auth → Phone, or set
+                MOCK_OTP_IN_DEV = true in src/config/dev.auth.ts.
               </Text>
             </View>
           )}

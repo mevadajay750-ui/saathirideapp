@@ -16,7 +16,7 @@ export function useSessionBootstrap() {
 
     const storedToken = storage.getString('auth_token');
     const storedUserJson = storage.getString('auth_user');
-    const needsProfileSetup = storage.getBoolean('needs_profile_setup') ?? false;
+    let needsProfileSetup = storage.getBoolean('needs_profile_setup') ?? false;
 
     if (!storedToken || !storedUserJson) {
       setLoading(false);
@@ -29,6 +29,10 @@ export function useSessionBootstrap() {
     } catch {
       clearAuth();
       return;
+    }
+
+    if (!user.name?.trim()) {
+      needsProfileSetup = true;
     }
 
     if (!isFirebaseConfigured) {

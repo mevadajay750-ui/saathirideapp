@@ -10,6 +10,7 @@
 
 import type { FirebaseAuthTypes } from '@react-native-firebase/auth';
 import { auth, isFirebaseConfigured, storage as firebaseStorage } from '@/config/firebase';
+import { DEV_OTP_CODE, MOCK_OTP_IN_DEV } from '@/config/dev.auth';
 import { AuthUser, UserRole } from '@/types';
 import { INDIA_PHONE_PREFIX } from '@/config/constants';
 import { storage } from '@/utils/storage';
@@ -24,6 +25,39 @@ function ensureFirebaseReady() {
 }
 
 let _confirmationResult: FirebaseAuthTypes.ConfirmationResult | null = null;
+let _mockOtpPhone: string | null = null;
+
+export function isMockOtpActive(): boolean {
+  return MOCK_OTP_IN_DEV;
+}
+
+function configureFirebaseAuthForDev(): void {
+  if (!__DEV__ || MOCK_OTP_IN_DEV || !isFirebaseConfigured) {
+    return;
+  }
+
+  auth().settings.appVerificationDisabledForTesting = true;
+}
+
+configureFirebaseAuthForDev();
+
+function normalizeIndianPhone(phone: string): string {
+  return phone.replace(/\D/g, '').slice(-10);
+}
+
+function buildMockAuthUser(phone: string, overrides?: Partial<AuthUser>): AuthUser {
+  return {
+    id: `dev-${phone}`,
+    phone,
+    name: '',
+    role: 'passenger',
+    avgRating: 0,
+    totalRides: 0,
+    createdAt: new Date().toISOString(),
+    isVerified: true,
+    ...overrides,
+  };
+}
 
 function extractPhoneDigits(phoneNumber?: string | null): string {
   if (!phoneNumber) return '';
@@ -53,8 +87,16 @@ function isProfileComplete(userId: string): boolean {
  * @param phone  10-digit Indian number (without +91)
  */
 export async function sendOTP(phone: string): Promise<void> {
+  const digits = normalizeIndianPhone(phone);
+
+  if (MOCK_OTP_IN_DEV) {
+    _mockOtpPhone = digits;
+    _confirmationResult = null;
+    return;
+  }
+
   ensureFirebaseReady();
-  const fullPhone = `${INDIA_PHONE_PREFIX}${phone}`;
+  const fullPhone = `${INDIA_PHONE_PREFIX}${digits}`;
   _confirmationResult = await auth().signInWithPhoneNumber(fullPhone);
 }
 
@@ -64,6 +106,18 @@ export async function sendOTP(phone: string): Promise<void> {
  * @returns Firebase ID token (used to exchange for our JWT)
  */
 export async function verifyOTP(code: string): Promise<string> {
+  if (MOCK_OTP_IN_DEV) {
+    if (!_mockOtpPhone) {
+      throw new Error('No OTP confirmation found. Please request OTP again.');
+    }
+    if (code !== DEV_OTP_CODE) {
+      const error = new Error('Invalid verification code') as Error & { code?: string };
+      error.code = 'auth/invalid-verification-code';
+      throw error;
+    }
+    return `dev-mock-token-${_mockOtpPhone}`;
+  }
+
   ensureFirebaseReady();
 
   if (!_confirmationResult) {
@@ -92,6 +146,18 @@ export async function exchangeFirebaseToken(idToken: string): Promise<{
   user: AuthUser;
   isNewUser: boolean;
 }> {
+  if (MOCK_OTP_IN_DEV && idToken.startsWith('dev-mock-token-')) {
+    const phone = idToken.replace('dev-mock-token-', '');
+    const user = buildMockAuthUser(phone);
+    const profileComplete = isProfileComplete(user.id);
+
+    return {
+      token: idToken,
+      user,
+      isNewUser: !profileComplete,
+    };
+  }
+
   const currentUser = auth().currentUser;
 
   if (!currentUser) {
@@ -129,6 +195,14 @@ export async function setupProfile(data: {
   role: UserRole;
   photoUrl?: string;
 }): Promise<AuthUser> {
+  if (MOCK_OTP_IN_DEV && _mockOtpPhone) {
+    return buildMockAuthUser(_mockOtpPhone, {
+      name: data.name,
+      role: data.role,
+      photoUrl: data.photoUrl,
+    });
+  }
+
   const currentUser = auth().currentUser;
 
   if (!currentUser) {
@@ -168,7 +242,8 @@ export async function uploadProfilePhoto(localUri: string, userId: string): Prom
  */
 export async function signOut(): Promise<void> {
   _confirmationResult = null;
-  if (isFirebaseConfigured) {
+  _mockOtpPhone = null;
+  if (isFirebaseConfigured && !MOCK_OTP_IN_DEV) {
     await auth().signOut();
   }
 }

@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  SafeAreaView,
-  StatusBar,
-} from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, StatusBar } from 'react-native';
 import { Colors, Spacing, BorderRadius, TextStyles, CommonStyles } from '@/theme';
 import { Button } from '@/components/common';
 import type { AuthScreenProps } from '@/navigation/types';
@@ -33,20 +27,18 @@ export default function WelcomeScreen({ navigation }: Props) {
           <View style={styles.illustration} />
 
           {/* Hero copy */}
-          <Text style={styles.heroTitle}>
-            Travel smarter,{'\n'}share the ride
-          </Text>
+          <Text style={styles.heroTitle}>Travel smarter,{'\n'}share the ride</Text>
           <Text style={styles.heroSubtitle}>
-            Connect with drivers going your way on any intercity route.
-            Comfortable travel, shared costs.
+            Connect with drivers going your way on any intercity route. Comfortable travel, shared
+            costs.
           </Text>
         </View>
 
         {/* CTA footer */}
         <View style={styles.footer}>
           <Button
-            label="Get started"
-            onPress={() => navigation.navigate('Phone')}
+            label="Create account"
+            onPress={() => navigation.navigate('Phone', { intent: 'signup' })}
             variant="primary"
             size="lg"
           />
@@ -55,7 +47,7 @@ export default function WelcomeScreen({ navigation }: Props) {
             <Text style={styles.loginText}>Already have an account? </Text>
             <Button
               label="Sign in"
-              onPress={() => navigation.navigate('Phone')}
+              onPress={() => navigation.navigate('Phone', { intent: 'login' })}
               variant="ghost"
               size="sm"
               fullWidth={false}

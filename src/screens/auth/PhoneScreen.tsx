@@ -19,6 +19,8 @@ import { Button } from '@/components/common';
 import { PhoneInput } from '@/components/common/PhoneInput';
 import { phoneSchema } from '@/utils/validators';
 import { useAuth } from '@/hooks/useAuth';
+import { isMockOtpActive } from '@/services/auth.service';
+import { DEV_OTP_CODE } from '@/config/dev.auth';
 import type { AuthScreenProps } from '@/navigation/types';
 
 type Props = AuthScreenProps<'Phone'>;
@@ -26,7 +28,9 @@ type Props = AuthScreenProps<'Phone'>;
 type FormData = { phone: string };
 const schema = z.object({ phone: phoneSchema });
 
-export default function PhoneScreen({ navigation }: Props) {
+export default function PhoneScreen({ navigation, route }: Props) {
+  const intent = route.params?.intent ?? 'signup';
+  const isSignup = intent === 'signup';
   const { isLoading, error, clearError, handleSendOTP } = useAuth();
   const phoneInputRef = useRef<TextInput>(null);
 
@@ -71,9 +75,13 @@ export default function PhoneScreen({ navigation }: Props) {
             <View style={styles.iconWrap}>
               <Text style={styles.iconEmoji}>📱</Text>
             </View>
-            <Text style={[TextStyles.h1, styles.title]}>Enter your{'\n'}mobile number</Text>
+            <Text style={[TextStyles.h1, styles.title]}>
+              {isSignup ? 'Sign up with your\nmobile number' : 'Sign in with your\nmobile number'}
+            </Text>
             <Text style={[TextStyles.body, styles.subtitle]}>
-              We&apos;ll send a 6-digit OTP to verify your number. Standard SMS rates may apply.
+              {isSignup
+                ? "We'll send a 6-digit OTP to create your account. Standard SMS rates may apply."
+                : "We'll send a 6-digit OTP to sign you in. Standard SMS rates may apply."}
             </Text>
           </View>
 
@@ -108,6 +116,26 @@ export default function PhoneScreen({ navigation }: Props) {
               size="lg"
               style={styles.submitBtn}
             />
+          </View>
+
+          {__DEV__ && isMockOtpActive() && (
+            <View style={styles.devNote}>
+              <Text style={styles.devNoteText}>
+                Dev mode: OTP is not sent via SMS. On the next screen, enter {DEV_OTP_CODE}.
+              </Text>
+            </View>
+          )}
+
+          <View style={styles.switchIntentRow}>
+            <Text style={styles.switchIntentText}>
+              {isSignup ? 'Already have an account? ' : 'New to SaathiRide? '}
+            </Text>
+            <TouchableOpacity
+              onPress={() => navigation.setParams({ intent: isSignup ? 'login' : 'signup' })}
+              hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+            >
+              <Text style={styles.switchIntentLink}>{isSignup ? 'Sign in' : 'Create account'}</Text>
+            </TouchableOpacity>
           </View>
 
           <Text style={[TextStyles.caption, styles.footerNote]}>
@@ -188,6 +216,37 @@ const styles = StyleSheet.create({
   },
   submitBtn: {
     marginTop: Spacing.xs,
+  },
+  devNote: {
+    backgroundColor: Colors.warningLight,
+    borderRadius: BorderRadius.md,
+    borderWidth: 1,
+    borderColor: Colors.warning,
+    paddingHorizontal: Spacing.base,
+    paddingVertical: Spacing.sm,
+  },
+  devNoteText: {
+    fontFamily: FontFamily.body,
+    fontSize: FontSize.xs,
+    color: Colors.warningDark,
+    lineHeight: FontSize.xs * 1.7,
+    textAlign: 'center',
+  },
+  switchIntentRow: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: Spacing.xl,
+  },
+  switchIntentText: {
+    fontFamily: FontFamily.body,
+    fontSize: FontSize.sm,
+    color: Colors.textMuted,
+  },
+  switchIntentLink: {
+    fontFamily: FontFamily.bodySemiBold,
+    fontSize: FontSize.sm,
+    color: Colors.primary,
   },
   footerNote: {
     textAlign: 'center',

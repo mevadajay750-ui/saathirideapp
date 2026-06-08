@@ -18,7 +18,8 @@ import { z } from 'zod';
 import { launchImageLibrary, launchCamera } from 'react-native-image-picker';
 import { Colors, FontFamily, FontSize, Spacing, BorderRadius, TextStyles } from '@/theme';
 import { Button, Input } from '@/components/common';
-import { useAuth } from '@/hooks/useAuth';
+import { useUpdateProfile, useUploadAndSavePhoto } from '@/hooks/useProfile';
+import { setupProfile } from '@/services/auth.service';
 import { useAuthStore } from '@/store/auth.store';
 import { UserRole } from '@/types';
 import type { AuthScreenProps } from '@/navigation/types';
@@ -52,12 +53,17 @@ const ROLE_OPTIONS: RoleOption[] = [
   },
 ];
 
-export default function ProfileSetupScreen(_props: Props) {
-  const { isLoading, error, clearError, handleSetupProfile } = useAuth();
+export default function ProfileSetupScreen({ navigation }: Props) {
   const user = useAuthStore((s) => s.user);
+  const setUser = useAuthStore((s) => s.setUser);
+  const completeProfileSetup = useAuthStore((s) => s.completeProfileSetup);
+
+  const { mutateAsync: updateProfile, isPending: isSavingProfile } = useUpdateProfile();
+  const { mutateAsync: uploadPhoto, isPending: isUploadingPhoto } = useUploadAndSavePhoto();
 
   const [selectedRole, setSelectedRole] = useState<UserRole>('passenger');
   const [photoUri, setPhotoUri] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   const {
     control,
@@ -65,8 +71,10 @@ export default function ProfileSetupScreen(_props: Props) {
     formState: { errors },
   } = useForm<FormData>({
     resolver: zodResolver(schema),
-    defaultValues: { name: '' },
+    defaultValues: { name: user?.name?.trim() ?? '' },
   });
+
+  const isLoading = isSavingProfile || isUploadingPhoto;
 
   const handlePickPhoto = useCallback(() => {
     Alert.alert('Profile photo', 'Choose a photo', [
@@ -94,17 +102,36 @@ export default function ProfileSetupScreen(_props: Props) {
 
   const onSubmit = useCallback(
     async ({ name }: FormData) => {
-      if (!user?.id) return;
-      clearError();
-      await handleSetupProfile({
-        name,
-        role: selectedRole,
-        localPhotoUri: photoUri ?? undefined,
-        userId: user.id,
-      });
+      setError(null);
+      try {
+        try {
+          await updateProfile({ name, role: selectedRole });
+        } catch {
+          const updatedUser = await setupProfile({ name, role: selectedRole });
+          setUser(updatedUser);
+        }
+
+        if (photoUri) {
+          try {
+            await uploadPhoto(photoUri);
+          } catch {
+            // Photo upload is optional — profile save already succeeded
+          }
+        }
+
+        if (selectedRole === 'driver') {
+          navigation.navigate('VehicleSetup');
+        } else {
+          completeProfileSetup();
+        }
+      } catch {
+        setError('Failed to save profile. Please try again.');
+      }
     },
-    [user, selectedRole, photoUri, clearError, handleSetupProfile],
+    [selectedRole, photoUri, updateProfile, uploadPhoto, navigation, completeProfileSetup, setUser],
   );
+
+  const submitLabel = selectedRole === 'passenger' ? 'Get Started' : 'Next: Add Vehicle →';
 
   return (
     <SafeAreaView style={styles.safe}>
@@ -116,10 +143,10 @@ export default function ProfileSetupScreen(_props: Props) {
       >
         <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
           <View style={styles.header}>
-            <Text style={[TextStyles.h1, styles.title]}>Set up your profile</Text>
+            <Text style={[TextStyles.h1, styles.title]}>Complete your signup</Text>
             <Text style={[TextStyles.body, styles.subtitle]}>
-              This is how other SaathiRide members will see you. Use your real name — it builds
-              trust.
+              Add your name and choose how you&apos;ll use SaathiRide. This is how other members
+              will see you.
             </Text>
           </View>
 
@@ -205,7 +232,7 @@ export default function ProfileSetupScreen(_props: Props) {
           )}
 
           <Button
-            label="Complete setup"
+            label={isLoading ? 'Saving…' : submitLabel}
             onPress={handleSubmit(onSubmit)}
             isLoading={isLoading}
             variant="primary"

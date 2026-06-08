@@ -81,6 +81,10 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   },
 
   clearAuth: () => {
+    const { user } = get();
+    if (user?.id) {
+      storage.remove(`profile_complete_${user.id}`);
+    }
     storage.remove(AUTH_TOKEN_KEY);
     storage.remove(AUTH_USER_KEY);
     storage.remove(NEEDS_PROFILE_SETUP_KEY);

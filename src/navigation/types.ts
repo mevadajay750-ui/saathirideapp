@@ -3,11 +3,14 @@ import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import type { BottomTabNavigationProp, BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
+export type AuthIntent = 'signup' | 'login';
+
 export type AuthStackParamList = {
   Welcome: undefined;
-  Phone: undefined;
+  Phone: { intent?: AuthIntent };
   OTP: { phone: string };
   ProfileSetup: undefined;
+  VehicleSetup: undefined;
   FontTest: undefined;
 };
 

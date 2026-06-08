@@ -13,6 +13,7 @@ import {
 } from '@/services/auth.service';
 import { useAuthStore } from '@/store/auth.store';
 import { UserRole } from '@/types';
+import { getOtpSendErrorMessage } from '@/utils/authErrors';
 
 export function useAuth() {
   const { setAuth, setUser, completeProfileSetup } = useAuthStore();
@@ -28,16 +29,7 @@ export function useAuth() {
       await sendOTP(phone);
       return true;
     } catch (err: unknown) {
-      const code = (err as { code?: string })?.code;
-      if (code === 'auth/invalid-phone-number') {
-        setError('Invalid phone number. Please check and try again.');
-      } else if (code === 'auth/too-many-requests') {
-        setError('Too many attempts. Please wait a few minutes and try again.');
-      } else if (code === 'auth/quota-exceeded') {
-        setError('SMS quota exceeded. Please try again later.');
-      } else {
-        setError('Failed to send OTP. Please check your connection.');
-      }
+      setError(getOtpSendErrorMessage(err));
       return false;
     } finally {
       setIsLoading(false);
@@ -45,20 +37,17 @@ export function useAuth() {
   }, []);
 
   const handleVerifyOTP = useCallback(
-    async (code: string): Promise<{ isNewUser: boolean } | null> => {
+    async (code: string): Promise<{ isNewUser: boolean; needsSetup: boolean } | null> => {
       setIsLoading(true);
       setError(null);
       try {
         const idToken = await verifyOTP(code);
         const { token, user, isNewUser } = await exchangeFirebaseToken(idToken);
 
-        if (isNewUser) {
-          setAuth(user, token, { needsProfileSetup: true });
-        } else {
-          setAuth(user, token);
-        }
+        const needsSetup = isNewUser || !user.name?.trim();
+        setAuth(user, token, { needsProfileSetup: needsSetup });
 
-        return { isNewUser };
+        return { isNewUser, needsSetup };
       } catch (err: unknown) {
         const firebaseErr = err as { code?: string; message?: string };
         if (firebaseErr.code === 'auth/invalid-verification-code') {

@@ -37,7 +37,7 @@ export async function upsertVehicle(payload: UpdateVehiclePayload): Promise<Vehi
     make: payload.make,
     model: payload.model,
     color: payload.color,
-    plate_number: payload.plateNumber,
+    plate_number: payload.plateNumber.toUpperCase(),
   });
   return response.data.vehicle;
 }

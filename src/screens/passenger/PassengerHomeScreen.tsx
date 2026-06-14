@@ -3,14 +3,14 @@ import {
   View,
   Text,
   StyleSheet,
-  SafeAreaView,
-  StatusBar,
   ScrollView,
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
 import { format } from 'date-fns';
-import { Colors, FontFamily, FontSize, Spacing, BorderRadius } from '@/theme';
+import { Colors, FontFamily, FontSize, Spacing, BorderRadius, IconSize, Icons } from '@/theme';
+import type { AppIconName } from '@/theme';
+import { AppIcon, ScreenWrapper } from '@/components/common';
 import { SearchForm } from '@/components/passenger/SearchForm';
 import { useRideSearch } from '@/hooks/useRideSearch';
 import { useAuthStore } from '@/store/auth.store';
@@ -18,11 +18,11 @@ import type { PassengerTabScreenProps, PassengerTabNavigation } from '@/navigati
 
 type Props = PassengerTabScreenProps<'PassengerHome'>;
 
-const POPULAR_ROUTES = [
-  { from: 'Ahmedabad', to: 'Vadodara', emoji: '🛣️' },
-  { from: 'Ahmedabad', to: 'Surat', emoji: '🏙️' },
-  { from: 'Ahmedabad', to: 'Rajkot', emoji: '🌊' },
-  { from: 'Mumbai', to: 'Pune', emoji: '⛰️' },
+const POPULAR_ROUTES: { from: string; to: string; icon: AppIconName }[] = [
+  { from: 'Ahmedabad', to: 'Vadodara', icon: Icons.road },
+  { from: 'Ahmedabad', to: 'Surat', icon: Icons.city },
+  { from: 'Ahmedabad', to: 'Rajkot', icon: Icons.water },
+  { from: 'Mumbai', to: 'Pune', icon: Icons.mountain },
 ];
 
 export default function PassengerHomeScreen({ navigation }: Props) {
@@ -56,8 +56,7 @@ export default function PassengerHomeScreen({ navigation }: Props) {
   }, [params, commit, rootNavigation]);
 
   return (
-    <SafeAreaView style={styles.safe}>
-      <StatusBar barStyle="light-content" backgroundColor={Colors.primary} />
+    <ScreenWrapper statusBar="brand" contentStyle={styles.safe}>
 
       <View style={styles.header}>
         <View>
@@ -95,31 +94,33 @@ export default function PassengerHomeScreen({ navigation }: Props) {
           <View style={styles.popularGrid}>
             {POPULAR_ROUTES.map((route, i) => (
               <View key={i} style={styles.popularCard}>
-                <Text style={styles.popularEmoji}>{route.emoji}</Text>
+                <AppIcon name={route.icon} size={IconSize.xl} color={Colors.primary} />
                 <Text style={styles.popularFrom}>{route.from}</Text>
-                <Text style={styles.popularArrow}>↓</Text>
+                <AppIcon name={Icons.down} size={IconSize.sm} color={Colors.primary400} />
                 <Text style={styles.popularTo}>{route.to}</Text>
               </View>
             ))}
           </View>
 
           <Text style={styles.sectionTitle}>How SaathiRide works</Text>
-          {[
-            { emoji: '🔍', step: 'Search', desc: 'Find drivers going your way on the same day' },
-            {
-              emoji: '✅',
-              step: 'Book',
-              desc: 'Request a seat — driver confirms within a few hours',
-            },
-            {
-              emoji: '💵',
-              step: 'Pay',
-              desc: 'Pay cash directly to the driver at your meeting point',
-            },
-          ].map((item, i) => (
+          {(
+            [
+              { icon: Icons.search, step: 'Search', desc: 'Find drivers going your way on the same day' },
+              {
+                icon: Icons.checkCircle,
+                step: 'Book',
+                desc: 'Request a seat — driver confirms within a few hours',
+              },
+              {
+                icon: Icons.cash,
+                step: 'Pay',
+                desc: 'Pay cash directly to the driver at your meeting point',
+              },
+            ] as { icon: AppIconName; step: string; desc: string }[]
+          ).map((item, i) => (
             <View key={i} style={styles.howRow}>
               <View style={styles.howIconWrap}>
-                <Text style={styles.howEmoji}>{item.emoji}</Text>
+                <AppIcon name={item.icon} size={IconSize.lg} color={Colors.primary} />
               </View>
               <View style={styles.howContent}>
                 <Text style={styles.howStep}>{item.step}</Text>
@@ -129,7 +130,7 @@ export default function PassengerHomeScreen({ navigation }: Props) {
           ))}
         </ScrollView>
       </KeyboardAvoidingView>
-    </SafeAreaView>
+    </ScreenWrapper>
   );
 }
 
@@ -207,16 +208,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 2,
   },
-  popularEmoji: { fontSize: 24, marginBottom: Spacing.xs },
   popularFrom: {
     fontFamily: FontFamily.bodySemiBold,
     fontSize: FontSize.sm,
     color: Colors.textPrimary,
-  },
-  popularArrow: {
-    fontFamily: FontFamily.body,
-    fontSize: FontSize.xs,
-    color: Colors.primary400,
   },
   popularTo: {
     fontFamily: FontFamily.bodyMedium,
@@ -249,7 +244,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  howEmoji: { fontSize: 22 },
   howContent: { flex: 1, justifyContent: 'center' },
   howStep: {
     fontFamily: FontFamily.bodySemiBold,

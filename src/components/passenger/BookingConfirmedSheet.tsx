@@ -2,7 +2,8 @@ import React, { forwardRef } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { BottomSheet, BottomSheetRef } from '@/components/common/BottomSheet';
 import { Button } from '@/components/common';
-import { Colors, FontFamily, FontSize, Spacing, BorderRadius } from '@/theme';
+import { Colors, FontFamily, FontSize, Spacing, BorderRadius, IconSize, Icons } from '@/theme';
+import { AppIcon } from '@/components/common/AppIcon';
 import { Booking } from '@/types';
 
 interface Props {
@@ -27,7 +28,11 @@ export const BookingConfirmedSheet = forwardRef<BottomSheetRef, Props>(
               { backgroundColor: isPending ? Colors.accentLight : Colors.successLight },
             ]}
           >
-            <Text style={styles.icon}>{isPending ? '⏳' : '🎉'}</Text>
+            <AppIcon
+              name={isPending ? Icons.hourglass : Icons.sparkles}
+              size={IconSize['2xl']}
+              color={isPending ? Colors.accentDark : Colors.successDark}
+            />
           </View>
 
           <Text style={styles.title}>{isPending ? 'Request sent!' : 'Booking confirmed!'}</Text>
@@ -39,7 +44,7 @@ export const BookingConfirmedSheet = forwardRef<BottomSheetRef, Props>(
           </Text>
 
           <View style={styles.cashReminder}>
-            <Text style={styles.cashEmoji}>💵</Text>
+            <AppIcon name={Icons.cash} size={IconSize.lg} color={Colors.accentDark} />
             <Text style={styles.cashText}>
               Remember — pay in cash directly to the driver at the meeting point.
             </Text>
@@ -72,7 +77,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  icon: { fontSize: 36 },
   title: {
     fontFamily: FontFamily.heading,
     fontSize: FontSize.xl,
@@ -97,7 +101,6 @@ const styles = StyleSheet.create({
     borderColor: '#FDCFA4',
     width: '100%',
   },
-  cashEmoji: { fontSize: 18 },
   cashText: {
     flex: 1,
     fontFamily: FontFamily.bodyMedium,

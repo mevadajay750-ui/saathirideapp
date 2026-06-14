@@ -3,12 +3,11 @@ import {
   View,
   Text,
   StyleSheet,
-  SafeAreaView,
-  StatusBar,
   FlatList,
   TouchableOpacity,
 } from 'react-native';
-import { Colors, FontFamily, FontSize, Spacing } from '@/theme';
+import { Colors, FontFamily, FontSize, Spacing, IconSize, Icons } from '@/theme';
+import { AppIcon, ScreenWrapper } from '@/components/common';
 import { NotificationItem } from '@/components/notifications/NotificationItem';
 import { useNotificationStore, InAppNotif } from '@/hooks/useNotificationStore';
 import { navigateFromNotification } from '@/utils/notificationNavigation';
@@ -32,8 +31,7 @@ export default function NotificationsScreen({ navigation }: Props) {
   );
 
   return (
-    <SafeAreaView style={styles.safe}>
-      <StatusBar barStyle="light-content" backgroundColor={Colors.primary} />
+    <ScreenWrapper statusBar="brand" contentStyle={styles.safe}>
 
       <View style={styles.header}>
         <TouchableOpacity
@@ -68,7 +66,7 @@ export default function NotificationsScreen({ navigation }: Props) {
         renderItem={({ item }) => <NotificationItem notif={item} onPress={handlePress} />}
         ListEmptyComponent={
           <View style={styles.empty}>
-            <Text style={styles.emptyEmoji}>🔔</Text>
+            <AppIcon name={Icons.bell} size={IconSize['2xl']} color={Colors.gray400} />
             <Text style={styles.emptyTitle}>No notifications yet</Text>
             <Text style={styles.emptyBody}>
               We will notify you when someone requests your ride, when a driver accepts your
@@ -77,7 +75,7 @@ export default function NotificationsScreen({ navigation }: Props) {
           </View>
         }
       />
-    </SafeAreaView>
+    </ScreenWrapper>
   );
 }
 
@@ -131,7 +129,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing['2xl'],
     gap: Spacing.md,
   },
-  emptyEmoji: { fontSize: 56 },
   emptyTitle: {
     fontFamily: FontFamily.headingSemiBold,
     fontSize: FontSize.lg,

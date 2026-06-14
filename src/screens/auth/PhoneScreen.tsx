@@ -1,21 +1,10 @@
 import React, { useRef, useCallback } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  SafeAreaView,
-  StatusBar,
-  ScrollView,
-  TouchableOpacity,
-  KeyboardAvoidingView,
-  Platform,
-  TextInput,
-} from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, KeyboardAvoidingView, Platform, TextInput } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Colors, FontFamily, FontSize, Spacing, BorderRadius, TextStyles } from '@/theme';
-import { Button } from '@/components/common';
+import { Colors, FontFamily, FontSize, Spacing, BorderRadius, TextStyles, IconSize } from '@/theme';
+import { AppIcon, Button, ScreenWrapper } from '@/components/common';
 import { PhoneInput } from '@/components/common/PhoneInput';
 import { phoneSchema } from '@/utils/validators';
 import { useAuth } from '@/hooks/useAuth';
@@ -55,8 +44,7 @@ export default function PhoneScreen({ navigation, route }: Props) {
   );
 
   return (
-    <SafeAreaView style={styles.safe}>
-      <StatusBar barStyle="dark-content" backgroundColor={Colors.white} />
+    <ScreenWrapper contentStyle={styles.safe}>
 
       <KeyboardAvoidingView
         style={{ flex: 1 }}
@@ -73,7 +61,7 @@ export default function PhoneScreen({ navigation, route }: Props) {
 
           <View style={styles.header}>
             <View style={styles.iconWrap}>
-              <Text style={styles.iconEmoji}>📱</Text>
+              <AppIcon name="phone-portrait-outline" size={IconSize.xl} color={Colors.primary} />
             </View>
             <Text style={[TextStyles.h1, styles.title]}>
               {isSignup ? 'Sign up with your\nmobile number' : 'Sign in with your\nmobile number'}
@@ -144,7 +132,7 @@ export default function PhoneScreen({ navigation, route }: Props) {
           </Text>
         </ScrollView>
       </KeyboardAvoidingView>
-    </SafeAreaView>
+    </ScreenWrapper>
   );
 }
 
@@ -179,9 +167,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: Spacing.base,
-  },
-  iconEmoji: {
-    fontSize: 28,
   },
   title: {
     marginBottom: Spacing.md,

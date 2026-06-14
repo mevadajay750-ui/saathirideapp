@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { Colors, FontFamily, FontSize, Spacing, BorderRadius, Shadow } from '@/theme';
+import { Colors, FontFamily, FontSize, Spacing, BorderRadius, Shadow, IconSize, Icons } from '@/theme';
+import { AppIcon } from '@/components/common/AppIcon';
 import { Ride, Booking } from '@/types';
 import { formatDepartureDate, formatPrice } from '@/utils/formatters';
 import { RideStatusBadge } from './RideStatusBadge';
@@ -40,17 +41,17 @@ export function RideCard({ ride, confirmedBookings = [], pendingCount = 0, onPre
 
       <View style={styles.metaRow}>
         <View style={styles.metaItem}>
-          <Text style={styles.metaEmoji}>📅</Text>
+          <AppIcon name={Icons.calendar} size={IconSize.sm} color={Colors.textSecondary} />
           <Text style={styles.metaText}>{formatDepartureDate(ride.departureAt)}</Text>
         </View>
         <View style={styles.metaItem}>
-          <Text style={styles.metaEmoji}>💺</Text>
+          <AppIcon name={Icons.seat} size={IconSize.sm} color={Colors.textSecondary} />
           <Text style={styles.metaText}>
             {seatsUsed}/{ride.totalSeats} filled
           </Text>
         </View>
         <View style={styles.metaItem}>
-          <Text style={styles.metaEmoji}>₹</Text>
+          <Text style={styles.metaCurrency}>₹</Text>
           <Text style={[styles.metaText, styles.price]}>{formatPrice(ride.pricePerSeat)}</Text>
         </View>
       </View>
@@ -127,7 +128,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 4,
   },
-  metaEmoji: { fontSize: 13 },
+  metaCurrency: {
+    fontFamily: FontFamily.headingSemiBold,
+    fontSize: FontSize.sm,
+    color: Colors.primary,
+  },
   metaText: {
     fontFamily: FontFamily.bodyMedium,
     fontSize: FontSize.sm,

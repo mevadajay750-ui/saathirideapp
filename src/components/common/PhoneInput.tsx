@@ -1,6 +1,7 @@
 import React, { forwardRef } from 'react';
 import { View, Text, TextInput, StyleSheet, TextInputProps, ViewStyle } from 'react-native';
-import { Colors, FontFamily, FontSize, Spacing, BorderRadius } from '@/theme';
+import { Colors, FontFamily, FontSize, Spacing, BorderRadius, IconSize } from '@/theme';
+import { AppIcon } from '@/components/common/AppIcon';
 
 interface PhoneInputProps extends Omit<TextInputProps, 'keyboardType'> {
   error?: string;
@@ -13,7 +14,7 @@ export const PhoneInput = forwardRef<TextInput, PhoneInputProps>(
       <View style={containerStyle}>
         <View style={[styles.wrapper, !!error && styles.errored]}>
           <View style={styles.prefix}>
-            <Text style={styles.flag}>🇮🇳</Text>
+            <AppIcon name="call-outline" size={IconSize.sm} color={Colors.textSecondary} />
             <Text style={styles.prefixText}>+91</Text>
             <View style={styles.prefixDivider} />
           </View>
@@ -63,9 +64,6 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch',
     justifyContent: 'center',
     gap: Spacing.xs,
-  },
-  flag: {
-    fontSize: 18,
   },
   prefixText: {
     fontFamily: FontFamily.bodyMedium,

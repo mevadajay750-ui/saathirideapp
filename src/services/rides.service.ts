@@ -1,12 +1,18 @@
 import { apiClient } from '@/api/client';
 import { Endpoints } from '@/api/endpoints';
+import {
+  BackendBooking,
+  BackendRide,
+  mapBooking,
+  mapBookings,
+  mapRide,
+  mapRides,
+} from '@/api/mappers';
 import { Ride, RideSearchParams } from '@/types';
 
 export interface CreateRidePayload {
   originCity: string;
-  originLandmark?: string;
   destinationCity: string;
-  destinationLandmark?: string;
   departureDate: string;
   departureTime: string;
   totalSeats: number;
@@ -15,46 +21,44 @@ export interface CreateRidePayload {
 }
 
 export async function createRide(payload: CreateRidePayload): Promise<Ride> {
-  const departureAt = new Date(
+  const departureTime = new Date(
     `${payload.departureDate}T${payload.departureTime}:00`,
   ).toISOString();
 
-  const response = await apiClient.post(Endpoints.RIDES_CREATE, {
+  const response = await apiClient.post<BackendRide>(Endpoints.RIDES_CREATE, {
     origin_city: payload.originCity,
-    origin_landmark: payload.originLandmark,
     destination_city: payload.destinationCity,
-    destination_landmark: payload.destinationLandmark,
-    departure_at: departureAt,
+    departure_time: departureTime,
     total_seats: payload.totalSeats,
     price_per_seat: payload.pricePerSeat,
     notes: payload.notes,
   });
 
-  return response.data.ride;
+  return mapRide(response.data);
 }
 
 export async function getMyRides(): Promise<Ride[]> {
-  const response = await apiClient.get(Endpoints.RIDES_MY);
-  return response.data.rides;
+  const response = await apiClient.get<BackendRide[]>(Endpoints.RIDES_MY);
+  return mapRides(response.data);
 }
 
 export async function getRideDetail(rideId: string): Promise<Ride> {
-  const response = await apiClient.get(Endpoints.RIDE_DETAIL(rideId));
-  return response.data.ride;
+  const response = await apiClient.get<BackendRide>(Endpoints.RIDE_DETAIL(rideId));
+  return mapRide(response.data);
 }
 
 export async function cancelRide(rideId: string): Promise<void> {
-  await apiClient.put(Endpoints.RIDE_UPDATE(rideId), { status: 'cancelled' });
+  await apiClient.delete(Endpoints.RIDE_DETAIL(rideId));
 }
 
 export async function searchRides(params: RideSearchParams): Promise<Ride[]> {
-  const response = await apiClient.get(Endpoints.RIDES_SEARCH, {
+  const response = await apiClient.get<BackendRide[]>(Endpoints.RIDES_SEARCH, {
     params: {
-      origin_city: params.originCity,
-      destination_city: params.destinationCity,
+      origin: params.originCity,
+      destination: params.destinationCity,
       date: params.date,
       seats: params.seats ?? 1,
     },
   });
-  return response.data.rides;
+  return mapRides(response.data);
 }

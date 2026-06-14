@@ -12,3 +12,5 @@ export { TextStyles } from './textStyles';
 export { CommonStyles } from './commonStyles';
 export { ThemeProvider, useTheme, useThemeColor } from './ThemeProvider';
 export type { ColorScheme, Theme, ThemeColors } from './ThemeProvider';
+export { Icons } from './icons';
+export type { AppIconName } from './icons';

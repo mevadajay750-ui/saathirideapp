@@ -1,6 +1,8 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { Colors, FontFamily, FontSize, Spacing, BorderRadius } from '@/theme';
+import { Colors, FontFamily, FontSize, Spacing, BorderRadius, IconSize } from '@/theme';
+import { Icons, type AppIconName } from '@/theme/icons';
+import { AppIcon } from '@/components/common/AppIcon';
 import { BookingStatus } from '@/types';
 
 interface Props {
@@ -13,7 +15,7 @@ type Config = {
   bg: string;
   text: string;
   dot: string;
-  emoji: string;
+  icon: AppIconName;
 };
 
 const CONFIG: Record<BookingStatus, Config> = {
@@ -22,35 +24,35 @@ const CONFIG: Record<BookingStatus, Config> = {
     bg: Colors.accentLight,
     text: Colors.accentDark,
     dot: Colors.accent,
-    emoji: '⏳',
+    icon: Icons.hourglass,
   },
   confirmed: {
     label: 'Confirmed',
     bg: Colors.successLight,
     text: Colors.successDark,
     dot: Colors.success,
-    emoji: '✅',
+    icon: Icons.checkCircle,
   },
   completed: {
     label: 'Completed',
     bg: Colors.gray100,
     text: Colors.gray500,
     dot: Colors.gray400,
-    emoji: '🏁',
+    icon: Icons.flag,
   },
   cancelled_by_passenger: {
     label: 'Cancelled by you',
     bg: Colors.errorLight,
     text: Colors.errorDark,
     dot: Colors.error,
-    emoji: '❌',
+    icon: Icons.closeCircle,
   },
   cancelled_by_driver: {
     label: 'Driver cancelled',
     bg: Colors.errorLight,
     text: Colors.errorDark,
     dot: Colors.error,
-    emoji: '❌',
+    icon: Icons.closeCircle,
   },
 };
 
@@ -71,7 +73,7 @@ export function BookingStatusDisplay({ status }: { status: BookingStatus }) {
   const cfg = CONFIG[status];
   return (
     <View style={[styles.displayWrap, { backgroundColor: cfg.bg }]}>
-      <Text style={styles.displayEmoji}>{cfg.emoji}</Text>
+      <AppIcon name={cfg.icon} size={IconSize.md} color={cfg.text} />
       <Text style={[styles.displayLabel, { color: cfg.text }]}>{cfg.label}</Text>
     </View>
   );
@@ -108,7 +110,6 @@ const styles = StyleSheet.create({
     paddingVertical: Spacing.md,
     borderRadius: BorderRadius.lg,
   },
-  displayEmoji: { fontSize: 20 },
   displayLabel: {
     fontFamily: FontFamily.headingSemiBold,
     fontSize: FontSize.md,

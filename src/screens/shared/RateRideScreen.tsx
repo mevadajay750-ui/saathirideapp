@@ -3,8 +3,6 @@ import {
   View,
   Text,
   StyleSheet,
-  SafeAreaView,
-  StatusBar,
   ScrollView,
   TouchableOpacity,
   TextInput,
@@ -12,8 +10,8 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
-import { Colors, FontFamily, FontSize, Spacing, BorderRadius } from '@/theme';
-import { Button } from '@/components/common';
+import { Colors, FontFamily, FontSize, Spacing, BorderRadius, IconSize, Icons } from '@/theme';
+import { AppIcon, Button, ScreenWrapper } from '@/components/common';
 import { StarRating } from '@/components/profile/StarRating';
 import { useSubmitRating } from '@/hooks/useRatings';
 import type { RootScreenProps } from '@/navigation/types';
@@ -61,8 +59,7 @@ export default function RateRideScreen({ route, navigation }: Props) {
   }, [score, comment, rideId, rateeId, submitRating, navigation]);
 
   return (
-    <SafeAreaView style={styles.safe}>
-      <StatusBar barStyle="light-content" backgroundColor={Colors.primary} />
+    <ScreenWrapper statusBar="brand" contentStyle={styles.safe}>
 
       <View style={styles.header}>
         <TouchableOpacity
@@ -81,7 +78,7 @@ export default function RateRideScreen({ route, navigation }: Props) {
       >
         <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
           <View style={styles.rateWho}>
-            <Text style={styles.rateWhoEmoji}>⭐</Text>
+            <AppIcon name={Icons.star} size={IconSize['2xl']} color={Colors.accent} />
             <Text style={styles.rateWhoTitle}>How was your ride with</Text>
             <Text style={styles.rateWhoName}>{rateeName}?</Text>
           </View>
@@ -103,10 +100,14 @@ export default function RateRideScreen({ route, navigation }: Props) {
                     onPress={() => handleQuickComment(text)}
                     activeOpacity={0.8}
                   >
-                    <Text style={[styles.quickChipText, active && styles.quickChipTextActive]}>
-                      {active ? '✓ ' : ''}
-                      {text}
-                    </Text>
+                    <View style={styles.quickChipContent}>
+                      {active && (
+                        <AppIcon name={Icons.check} size={IconSize.sm} color={Colors.primaryDeep} />
+                      )}
+                      <Text style={[styles.quickChipText, active && styles.quickChipTextActive]}>
+                        {text}
+                      </Text>
+                    </View>
                   </TouchableOpacity>
                 );
               })}
@@ -144,7 +145,7 @@ export default function RateRideScreen({ route, navigation }: Props) {
           </TouchableOpacity>
         </ScrollView>
       </KeyboardAvoidingView>
-    </SafeAreaView>
+    </ScreenWrapper>
   );
 }
 
@@ -180,7 +181,6 @@ const styles = StyleSheet.create({
     paddingVertical: Spacing.xl,
     gap: Spacing.xs,
   },
-  rateWhoEmoji: { fontSize: 48 },
   rateWhoTitle: {
     fontFamily: FontFamily.body,
     fontSize: FontSize.base,
@@ -226,6 +226,8 @@ const styles = StyleSheet.create({
     gap: Spacing.sm,
   },
   quickChip: {
+    flexDirection: 'row',
+    alignItems: 'center',
     paddingHorizontal: Spacing.md,
     paddingVertical: Spacing.xs + 2,
     borderRadius: BorderRadius.full,
@@ -236,6 +238,11 @@ const styles = StyleSheet.create({
   quickChipActive: {
     borderColor: Colors.primary,
     backgroundColor: Colors.primaryLight,
+  },
+  quickChipContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
   },
   quickChipText: {
     fontFamily: FontFamily.bodyMedium,

@@ -3,16 +3,15 @@ import {
   View,
   Text,
   StyleSheet,
-  SafeAreaView,
-  StatusBar,
   ScrollView,
   TouchableOpacity,
   KeyboardAvoidingView,
   Platform,
   Alert,
 } from 'react-native';
-import { Colors, FontFamily, FontSize, Spacing, BorderRadius, TextStyles } from '@/theme';
-import { VehicleForm } from '@/components/profile/VehicleForm';
+import { Colors, FontFamily, FontSize, Spacing, BorderRadius, TextStyles, IconSize, Icons } from '@/theme';
+import { AppIcon, ScreenWrapper } from '@/components/common';
+import { VehicleForm, VehicleFormData } from '@/components/profile/VehicleForm';
 import { useUpsertVehicle } from '@/hooks/useProfile';
 import { fetchProfile } from '@/services/profile.service';
 import { useAuthStore } from '@/store/auth.store';
@@ -34,7 +33,7 @@ export default function VehicleSetupScreen(_props: Props) {
   }, [setUser, completeProfileSetup]);
 
   const handleSaveVehicle = useCallback(
-    async (data: { make: string; model: string; color: string; plateNumber: string }) => {
+    async (data: VehicleFormData) => {
       try {
         await saveVehicle(data);
         await finishOnboarding();
@@ -59,8 +58,7 @@ export default function VehicleSetupScreen(_props: Props) {
   const isLoading = isSavingVehicle || isSkipping;
 
   return (
-    <SafeAreaView style={styles.safe}>
-      <StatusBar barStyle="dark-content" backgroundColor={Colors.white} />
+    <ScreenWrapper contentStyle={styles.safe}>
 
       <KeyboardAvoidingView
         style={{ flex: 1 }}
@@ -73,7 +71,7 @@ export default function VehicleSetupScreen(_props: Props) {
         >
           <View style={styles.header}>
             <View style={styles.logoMark}>
-              <Text style={styles.logoEmoji}>🚘</Text>
+              <AppIcon name={Icons.carSport} size={IconSize.xl} color={Colors.primary} />
             </View>
             <Text style={[TextStyles.h2, styles.title]}>Register your vehicle</Text>
             <Text style={[TextStyles.body, styles.subtitle]}>
@@ -84,7 +82,7 @@ export default function VehicleSetupScreen(_props: Props) {
           <View style={styles.progress}>
             <View style={styles.progressStep}>
               <View style={[styles.progressDot, styles.progressDotDone]}>
-                <Text style={styles.progressDotText}>✓</Text>
+                <AppIcon name={Icons.check} size={14} color={Colors.white} />
               </View>
               <Text style={styles.progressLabel}>Profile</Text>
             </View>
@@ -109,7 +107,7 @@ export default function VehicleSetupScreen(_props: Props) {
           </TouchableOpacity>
         </ScrollView>
       </KeyboardAvoidingView>
-    </SafeAreaView>
+    </ScreenWrapper>
   );
 }
 
@@ -136,9 +134,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: Spacing.md,
-  },
-  logoEmoji: {
-    fontSize: 32,
   },
   title: {
     color: Colors.textBrand,

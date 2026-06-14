@@ -2,7 +2,8 @@ import React, { forwardRef } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { BottomSheet, BottomSheetRef } from '@/components/common/BottomSheet';
 import { Button } from '@/components/common';
-import { Colors, FontFamily, FontSize, Spacing, BorderRadius, TextStyles } from '@/theme';
+import { Colors, FontFamily, FontSize, Spacing, BorderRadius, TextStyles, IconSize, Icons } from '@/theme';
+import { AppIcon } from '@/components/common/AppIcon';
 import { Ride } from '@/types';
 import { formatDepartureDate, formatPrice } from '@/utils/formatters';
 
@@ -20,7 +21,7 @@ export const RideConfirmSheet = forwardRef<BottomSheetRef, RideConfirmSheetProps
       <BottomSheet ref={ref} snapPoints={['55%']} onClose={onPostAnother}>
         <View style={styles.container}>
           <View style={styles.successIcon}>
-            <Text style={styles.successEmoji}>🎉</Text>
+            <AppIcon name={Icons.sparkles} size={IconSize['2xl']} color={Colors.successDark} />
           </View>
 
           <Text style={[TextStyles.h2, styles.title]}>Ride posted!</Text>
@@ -32,23 +33,23 @@ export const RideConfirmSheet = forwardRef<BottomSheetRef, RideConfirmSheetProps
           <View style={styles.summaryCard}>
             <View style={styles.routeRow}>
               <Text style={styles.routeCity}>{ride.origin.city}</Text>
-              <Text style={styles.routeArrow}>→</Text>
+              <AppIcon name={Icons.forward} size={IconSize.md} color={Colors.primary400} />
               <Text style={styles.routeCity}>{ride.destination.city}</Text>
             </View>
 
             <View style={styles.metaRow}>
               <View style={styles.metaItem}>
-                <Text style={styles.metaEmoji}>📅</Text>
+                <AppIcon name={Icons.calendar} size={IconSize.md} color={Colors.textSecondary} />
                 <Text style={styles.metaText}>{formatDepartureDate(ride.departureAt)}</Text>
               </View>
               <View style={styles.metaItem}>
-                <Text style={styles.metaEmoji}>💺</Text>
+                <AppIcon name={Icons.seat} size={IconSize.md} color={Colors.textSecondary} />
                 <Text style={styles.metaText}>
                   {ride.seatsAvailable} seat{ride.seatsAvailable !== 1 ? 's' : ''}
                 </Text>
               </View>
               <View style={styles.metaItem}>
-                <Text style={styles.metaEmoji}>₹</Text>
+                <Text style={styles.metaCurrency}>₹</Text>
                 <Text style={[styles.metaText, styles.metaPrice]}>
                   {formatPrice(ride.pricePerSeat)}/seat
                 </Text>
@@ -86,9 +87,6 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: Colors.success,
   },
-  successEmoji: {
-    fontSize: 36,
-  },
   title: {
     textAlign: 'center',
     marginBottom: Spacing.sm,
@@ -121,11 +119,6 @@ const styles = StyleSheet.create({
     fontSize: FontSize.md,
     color: Colors.primaryDeep,
   },
-  routeArrow: {
-    fontFamily: FontFamily.body,
-    fontSize: FontSize.md,
-    color: Colors.primary400,
-  },
   metaRow: {
     flexDirection: 'row',
     justifyContent: 'space-around',
@@ -134,8 +127,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: Spacing.xs,
   },
-  metaEmoji: {
-    fontSize: 16,
+  metaCurrency: {
+    fontFamily: FontFamily.headingSemiBold,
+    fontSize: FontSize.sm,
+    color: Colors.primary,
   },
   metaText: {
     fontFamily: FontFamily.bodyMedium,

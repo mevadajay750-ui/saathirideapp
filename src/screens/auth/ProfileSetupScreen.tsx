@@ -3,8 +3,6 @@ import {
   View,
   Text,
   StyleSheet,
-  SafeAreaView,
-  StatusBar,
   ScrollView,
   TouchableOpacity,
   Image,
@@ -16,8 +14,8 @@ import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { launchImageLibrary, launchCamera } from 'react-native-image-picker';
-import { Colors, FontFamily, FontSize, Spacing, BorderRadius, TextStyles } from '@/theme';
-import { Button, Input } from '@/components/common';
+import { Colors, FontFamily, FontSize, Spacing, BorderRadius, IconSize, Icons, TextStyles } from '@/theme';
+import { AppIcon, Button, Input, ScreenWrapper } from '@/components/common';
 import { useUpdateProfile, useUploadAndSavePhoto } from '@/hooks/useProfile';
 import { setupProfile } from '@/services/auth.service';
 import { useAuthStore } from '@/store/auth.store';
@@ -31,9 +29,11 @@ const schema = z.object({
 });
 type FormData = z.infer<typeof schema>;
 
+import type { AppIconName } from '@/theme';
+
 type RoleOption = {
   id: UserRole;
-  emoji: string;
+  icon: AppIconName;
   title: string;
   subtitle: string;
 };
@@ -41,13 +41,13 @@ type RoleOption = {
 const ROLE_OPTIONS: RoleOption[] = [
   {
     id: 'driver',
-    emoji: '🚗',
+    icon: Icons.car,
     title: "I'm a driver",
     subtitle: "Offer rides and earn money on trips I'm already making",
   },
   {
     id: 'passenger',
-    emoji: '🎒',
+    icon: Icons.passenger,
     title: "I'm a passenger",
     subtitle: 'Find affordable, comfortable rides between cities',
   },
@@ -134,8 +134,7 @@ export default function ProfileSetupScreen({ navigation }: Props) {
   const submitLabel = selectedRole === 'passenger' ? 'Get Started' : 'Next: Add Vehicle →';
 
   return (
-    <SafeAreaView style={styles.safe}>
-      <StatusBar barStyle="dark-content" backgroundColor={Colors.white} />
+    <ScreenWrapper contentStyle={styles.safe}>
 
       <KeyboardAvoidingView
         style={{ flex: 1 }}
@@ -159,12 +158,12 @@ export default function ProfileSetupScreen({ navigation }: Props) {
               <Image source={{ uri: photoUri }} style={styles.photoImage} />
             ) : (
               <View style={styles.photoPlaceholder}>
-                <Text style={styles.photoEmoji}>📷</Text>
+                <AppIcon name={Icons.camera} size={IconSize.xl} color={Colors.primary} />
                 <Text style={styles.photoLabel}>Add photo</Text>
               </View>
             )}
             <View style={styles.photoBadge}>
-              <Text style={styles.photoBadgeText}>✏️</Text>
+              <AppIcon name={Icons.edit} size={IconSize.xs} color={Colors.white} />
             </View>
           </TouchableOpacity>
 
@@ -204,10 +203,17 @@ export default function ProfileSetupScreen({ navigation }: Props) {
                       selectedRole === option.id && styles.roleCheckSelected,
                     ]}
                   >
-                    {selectedRole === option.id && <Text style={styles.roleCheckMark}>✓</Text>}
+                    {selectedRole === option.id && (
+                      <AppIcon name={Icons.check} size={12} color={Colors.white} />
+                    )}
                   </View>
 
-                  <Text style={styles.roleEmoji}>{option.emoji}</Text>
+                  <AppIcon
+                    name={option.icon}
+                    size={IconSize['2xl']}
+                    color={selectedRole === option.id ? Colors.primaryDeep : Colors.textSecondary}
+                    style={styles.roleIcon}
+                  />
                   <Text
                     style={[
                       styles.roleTitle,
@@ -245,7 +251,7 @@ export default function ProfileSetupScreen({ navigation }: Props) {
           </Text>
         </ScrollView>
       </KeyboardAvoidingView>
-    </SafeAreaView>
+    </ScreenWrapper>
   );
 }
 
@@ -295,9 +301,6 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: Colors.primary,
   },
-  photoEmoji: {
-    fontSize: 28,
-  },
   photoLabel: {
     fontFamily: FontFamily.bodyMedium,
     fontSize: FontSize.xs,
@@ -315,9 +318,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderWidth: 2,
     borderColor: Colors.white,
-  },
-  photoBadgeText: {
-    fontSize: 14,
   },
   section: {
     marginBottom: Spacing.xl,
@@ -364,13 +364,7 @@ const styles = StyleSheet.create({
     borderColor: Colors.primary,
     backgroundColor: Colors.primary,
   },
-  roleCheckMark: {
-    fontFamily: FontFamily.bodyBold,
-    fontSize: 12,
-    color: Colors.white,
-  },
-  roleEmoji: {
-    fontSize: 36,
+  roleIcon: {
     marginBottom: Spacing.sm,
   },
   roleTitle: {

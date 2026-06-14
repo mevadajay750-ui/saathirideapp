@@ -1,22 +1,21 @@
 import React from 'react';
-import { View, Text, StyleSheet, SafeAreaView, StatusBar } from 'react-native';
-import { Colors, Spacing, BorderRadius, TextStyles, CommonStyles } from '@/theme';
-import { Button } from '@/components/common';
+import { View, Text, StyleSheet } from 'react-native';
+import { Colors, Spacing, BorderRadius, TextStyles, CommonStyles, IconSize } from '@/theme';
+import { AppIcon, Button, ScreenWrapper } from '@/components/common';
 import type { AuthScreenProps } from '@/navigation/types';
 
 type Props = AuthScreenProps<'Welcome'>;
 
 export default function WelcomeScreen({ navigation }: Props) {
   return (
-    <SafeAreaView style={styles.safe}>
-      <StatusBar barStyle="dark-content" backgroundColor={Colors.white} />
+    <ScreenWrapper contentStyle={styles.safe}>
 
       <View style={styles.container}>
         {/* Hero area */}
         <View style={[CommonStyles.centerFlex, styles.hero]}>
           {/* Logo mark */}
           <View style={styles.logoMark}>
-            <Text style={styles.logoEmoji}>🚗</Text>
+            <AppIcon name="car-sport-outline" size={IconSize.xl} color={Colors.white} />
           </View>
 
           {/* App name */}
@@ -59,7 +58,7 @@ export default function WelcomeScreen({ navigation }: Props) {
           </Text>
         </View>
       </View>
-    </SafeAreaView>
+    </ScreenWrapper>
   );
 }
 
@@ -83,9 +82,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: Spacing.md,
-  },
-  logoEmoji: {
-    fontSize: 32,
   },
   appName: {
     ...TextStyles.display,

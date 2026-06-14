@@ -1,6 +1,7 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Text, View, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import { DriverTabParamList } from './types';
 import DriverHomeScreen from '@/screens/driver/DriverHomeScreen';
 import PostRideScreen from '@/screens/driver/PostRideScreen';
@@ -12,11 +13,11 @@ import { useNotificationStore } from '@/hooks/useNotificationStore';
 
 const Tab = createBottomTabNavigator<DriverTabParamList>();
 
-const TAB_ICONS: Record<string, { active: string; inactive: string }> = {
-  DriverHome: { active: '🏠', inactive: '🏠' },
-  PostRide: { active: '➕', inactive: '➕' },
-  DriverRides: { active: '📋', inactive: '📋' },
-  Profile: { active: '👤', inactive: '👤' },
+const TAB_ICONS: Record<string, React.ComponentProps<typeof Ionicons>['name']> = {
+  DriverHome: 'home-outline',
+  PostRide: 'add-circle-outline',
+  DriverRides: 'list-outline',
+  Profile: 'person-outline',
 };
 
 export default function DriverNavigator() {
@@ -30,11 +31,9 @@ export default function DriverNavigator() {
         tabBarActiveTintColor: Colors.primary,
         tabBarInactiveTintColor: Colors.gray400,
         tabBarLabelStyle: styles.tabLabel,
-        tabBarIcon: ({ focused }) => (
+        tabBarIcon: ({ color, size }) => (
           <View>
-            <Text style={styles.tabIcon}>
-              {focused ? TAB_ICONS[route.name]?.active : TAB_ICONS[route.name]?.inactive}
-            </Text>
+            <Ionicons name={TAB_ICONS[route.name]} size={size ?? 22} color={color} />
             {route.name === 'Profile' && unreadCount > 0 && (
               <NotificationBadge count={unreadCount} />
             )}
@@ -74,8 +73,5 @@ const styles = StyleSheet.create({
   tabLabel: {
     fontFamily: FontFamily.bodyMedium,
     fontSize: FontSize.xs,
-  },
-  tabIcon: {
-    fontSize: 22,
   },
 });

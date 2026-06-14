@@ -1,13 +1,14 @@
 import React from 'react';
-import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
+import { Text, StyleSheet, ActivityIndicator } from 'react-native';
 import { Colors, FontSize, FontFamily } from '@/theme';
+import { ScreenWrapper } from '@/components/common';
 
 export default function SplashScreen() {
   return (
-    <View style={styles.container}>
+    <ScreenWrapper statusBar="brand" contentStyle={styles.container}>
       <Text style={styles.logo}>SaathiRide</Text>
       <ActivityIndicator color={Colors.white} style={styles.spinner} />
-    </View>
+    </ScreenWrapper>
   );
 }
 

@@ -42,10 +42,10 @@ export function useAuth() {
       setError(null);
       try {
         const idToken = await verifyOTP(code);
-        const { token, user, isNewUser } = await exchangeFirebaseToken(idToken);
+        const { token, refreshToken, user, isNewUser } = await exchangeFirebaseToken(idToken);
 
         const needsSetup = isNewUser || !user.name?.trim();
-        setAuth(user, token, { needsProfileSetup: needsSetup });
+        setAuth(user, token, { refreshToken, needsProfileSetup: needsSetup });
 
         return { isNewUser, needsSetup };
       } catch (err: unknown) {

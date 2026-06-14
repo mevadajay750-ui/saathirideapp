@@ -3,8 +3,6 @@ import {
   View,
   Text,
   StyleSheet,
-  SafeAreaView,
-  StatusBar,
   ScrollView,
   KeyboardAvoidingView,
   Platform,
@@ -15,7 +13,7 @@ import { z } from 'zod';
 import { format } from 'date-fns';
 
 import { Colors, FontFamily, FontSize, Spacing, BorderRadius, TextStyles } from '@/theme';
-import { Button, Input } from '@/components/common';
+import { Button, Input, ScreenWrapper } from '@/components/common';
 import { BottomSheetRef } from '@/components/common/BottomSheet';
 import { CityPicker } from '@/components/driver/CityPicker';
 import { DateTimePicker } from '@/components/driver/DateTimePicker';
@@ -77,9 +75,7 @@ export default function PostRideScreen({ navigation }: Props) {
     async (data: FormData) => {
       await postRide({
         originCity: data.originCity,
-        originLandmark: data.originLandmark,
         destinationCity: data.destinationCity,
-        destinationLandmark: data.destinationLandmark,
         departureDate: format(data.departureDate, 'yyyy-MM-dd'),
         departureTime: format(data.departureTime, 'HH:mm'),
         totalSeats: data.totalSeats,
@@ -110,8 +106,7 @@ export default function PostRideScreen({ navigation }: Props) {
   }, [navigation]);
 
   return (
-    <SafeAreaView style={styles.safe}>
-      <StatusBar barStyle="light-content" backgroundColor={Colors.primary} />
+    <ScreenWrapper statusBar="brand" contentStyle={styles.safe}>
 
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Post a ride</Text>
@@ -316,7 +311,7 @@ export default function PostRideScreen({ navigation }: Props) {
         onViewRide={handleViewRide}
         onPostAnother={handlePostAnother}
       />
-    </SafeAreaView>
+    </ScreenWrapper>
   );
 }
 

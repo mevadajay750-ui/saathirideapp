@@ -10,7 +10,6 @@ import {
   registerDeviceToken,
   subscribeToTokenRefresh,
   parseMessage,
-  reportPermissionStatus,
   triggerForegroundNotif,
 } from '@/services/notification.service';
 import { useNotificationStore } from '@/hooks/useNotificationStore';
@@ -33,7 +32,6 @@ export function useNotifications() {
     async function setup() {
       const granted = await requestPermission();
       if (!granted) {
-        await reportPermissionStatus();
         return;
       }
 

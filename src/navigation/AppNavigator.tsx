@@ -3,6 +3,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useAuthStore } from '@/store/auth.store';
 import { useProfileComplete } from '@/hooks/useProfileComplete';
+import { getNavigationRole } from '@/types';
 import { RootStackParamList } from './types';
 import AuthNavigator from './AuthNavigator';
 import DriverNavigator from './DriverNavigator';
@@ -28,7 +29,7 @@ function AuthStackScreen() {
   if (token && needsProfileSetup) {
     if (!isProfileComplete) {
       initialRoute = 'ProfileSetup';
-    } else if (user?.role === 'driver') {
+    } else if (user?.role === 'driver' || user?.role === 'both') {
       initialRoute = 'VehicleSetup';
     } else {
       initialRoute = 'ProfileSetup';
@@ -68,12 +69,14 @@ export default function AppNavigator() {
 
   const showAuth = !isAuthenticated || needsProfileSetup || !isProfileComplete;
 
+  const navRole = user ? getNavigationRole(user.role) : 'passenger';
+
   return (
     <NavigationContainer ref={navigationRef}>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         {showAuth ? (
           <Stack.Screen name="Auth" component={AuthStackScreen} />
-        ) : user?.role === 'driver' ? (
+        ) : navRole === 'driver' ? (
           <>
             <Stack.Screen name="DriverTabs" component={DriverNavigator} />
             <Stack.Screen

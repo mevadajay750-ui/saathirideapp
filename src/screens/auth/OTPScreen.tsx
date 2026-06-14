@@ -3,15 +3,13 @@ import {
   View,
   Text,
   StyleSheet,
-  SafeAreaView,
-  StatusBar,
   TouchableOpacity,
   ScrollView,
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
-import { Colors, FontFamily, FontSize, Spacing, BorderRadius, TextStyles } from '@/theme';
-import { Button } from '@/components/common';
+import { Colors, FontFamily, FontSize, Spacing, BorderRadius, TextStyles, IconSize } from '@/theme';
+import { AppIcon, Button, ScreenWrapper } from '@/components/common';
 import { OTPInput } from '@/components/common/OTPInput';
 import { useAuth } from '@/hooks/useAuth';
 import { useAuthStore } from '@/store/auth.store';
@@ -73,8 +71,7 @@ export default function OTPScreen({ navigation, route }: Props) {
   }, [phone, clearError, start]);
 
   return (
-    <SafeAreaView style={styles.safe}>
-      <StatusBar barStyle="dark-content" backgroundColor={Colors.white} />
+    <ScreenWrapper contentStyle={styles.safe}>
 
       <KeyboardAvoidingView
         style={{ flex: 1 }}
@@ -91,7 +88,7 @@ export default function OTPScreen({ navigation, route }: Props) {
 
           <View style={styles.header}>
             <View style={styles.iconWrap}>
-              <Text style={styles.iconEmoji}>🔐</Text>
+              <AppIcon name="lock-closed-outline" size={IconSize.xl} color={Colors.primary} />
             </View>
             <Text style={[TextStyles.h1, styles.title]}>Verify your number</Text>
             <Text style={[TextStyles.body, styles.subtitle]}>
@@ -173,7 +170,7 @@ export default function OTPScreen({ navigation, route }: Props) {
           )}
         </ScrollView>
       </KeyboardAvoidingView>
-    </SafeAreaView>
+    </ScreenWrapper>
   );
 }
 
@@ -208,9 +205,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: Spacing.base,
-  },
-  iconEmoji: {
-    fontSize: 28,
   },
   title: {
     marginBottom: Spacing.md,

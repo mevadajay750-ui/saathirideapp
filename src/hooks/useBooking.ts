@@ -11,9 +11,7 @@
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getRideDetail } from '@/services/rides.service';
-import { getMyBookings, updateBookingStatus } from '@/services/bookings.service';
-import { apiClient } from '@/api/client';
-import { Endpoints } from '@/api/endpoints';
+import { createBooking, getMyBookings, updateBookingStatus } from '@/services/bookings.service';
 import { Booking } from '@/types';
 
 export const BOOKING_KEYS = {
@@ -40,12 +38,7 @@ export function useRequestBooking() {
     }: {
       rideId: string;
       seatsRequested: number;
-    }): Promise<Booking> => {
-      const response = await apiClient.post(Endpoints.BOOKING_CREATE(rideId), {
-        seats_requested: seatsRequested,
-      });
-      return response.data.booking;
-    },
+    }): Promise<Booking> => createBooking(rideId, seatsRequested),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: BOOKING_KEYS.myBookings });
     },

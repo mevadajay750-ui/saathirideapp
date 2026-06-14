@@ -3,8 +3,6 @@ import {
   View,
   Text,
   StyleSheet,
-  SafeAreaView,
-  StatusBar,
   ScrollView,
   TouchableOpacity,
   Alert,
@@ -15,9 +13,9 @@ import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Colors, FontFamily, FontSize, Spacing, BorderRadius } from '@/theme';
-import { Input, Button } from '@/components/common';
+import { Input, Button, ScreenWrapper } from '@/components/common';
 import { AvatarPicker } from '@/components/profile/AvatarPicker';
-import { VehicleForm } from '@/components/profile/VehicleForm';
+import { VehicleForm, VehicleFormData } from '@/components/profile/VehicleForm';
 import {
   useProfileData,
   useUpdateProfile,
@@ -36,7 +34,7 @@ type Props = RootScreenProps<'EditProfile'>;
 
 export default function EditProfileScreen({ navigation }: Props) {
   const user = useAuthStore((s) => s.user);
-  const isDriver = user?.role === 'driver';
+  const isDriver = user?.role === 'driver' || user?.role === 'both';
 
   const { data: profile } = useProfileData();
   const displayUser = profile ?? user;
@@ -85,7 +83,7 @@ export default function EditProfileScreen({ navigation }: Props) {
   );
 
   const handleSaveVehicle = useCallback(
-    async (data: { make: string; model: string; color: string; plateNumber: string }) => {
+    async (data: VehicleFormData) => {
       try {
         await saveVehicle(data);
         Alert.alert('Saved', 'Vehicle details updated.');
@@ -97,8 +95,7 @@ export default function EditProfileScreen({ navigation }: Props) {
   );
 
   return (
-    <SafeAreaView style={styles.safe}>
-      <StatusBar barStyle="light-content" backgroundColor={Colors.primary} />
+    <ScreenWrapper statusBar="brand" contentStyle={styles.safe}>
 
       <View style={styles.header}>
         <TouchableOpacity
@@ -177,7 +174,7 @@ export default function EditProfileScreen({ navigation }: Props) {
           )}
         </ScrollView>
       </KeyboardAvoidingView>
-    </SafeAreaView>
+    </ScreenWrapper>
   );
 }
 

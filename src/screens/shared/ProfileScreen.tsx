@@ -3,8 +3,6 @@ import {
   View,
   Text,
   StyleSheet,
-  SafeAreaView,
-  StatusBar,
   ScrollView,
   TouchableOpacity,
   Alert,
@@ -13,7 +11,8 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { Colors, FontFamily, FontSize, Spacing, BorderRadius } from '@/theme';
+import { Colors, FontFamily, FontSize, Spacing, BorderRadius, IconSize, Icons } from '@/theme';
+import { AppIcon, ScreenWrapper } from '@/components/common';
 import { AvatarPicker } from '@/components/profile/AvatarPicker';
 import { StatCard } from '@/components/profile/StatCard';
 import { StarRating } from '@/components/profile/StarRating';
@@ -37,7 +36,7 @@ export default function ProfileScreen(_props: Props) {
   const user = useAuthStore((s) => s.user);
   const clearAuth = useAuthStore((s) => s.clearAuth);
   const unreadCount = useNotificationStore((s) => s.unreadCount);
-  const isDriver = user?.role === 'driver';
+  const isDriver = user?.role === 'driver' || user?.role === 'both';
 
   const { data: profile, isLoading, refetch, isRefetching } = useProfileData();
   const { data: ratings = [], isLoading: ratingsLoading } = useUserRatings(user?.id ?? '');
@@ -110,17 +109,16 @@ export default function ProfileScreen(_props: Props) {
 
   if (isLoading && !displayUser) {
     return (
-      <SafeAreaView style={styles.safe}>
+      <ScreenWrapper statusBar="brand" contentStyle={styles.safe}>
         <View style={styles.loader}>
           <ActivityIndicator color={Colors.primary} size="large" />
         </View>
-      </SafeAreaView>
+      </ScreenWrapper>
     );
   }
 
   return (
-    <SafeAreaView style={styles.safe}>
-      <StatusBar barStyle="light-content" backgroundColor={Colors.primary} />
+    <ScreenWrapper statusBar="brand" contentStyle={styles.safe}>
 
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Profile</Text>
@@ -130,7 +128,7 @@ export default function ProfileScreen(_props: Props) {
             style={styles.bellBtn}
             hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
           >
-            <Text style={styles.bellIcon}>🔔</Text>
+            <AppIcon name={Icons.bell} size={IconSize.lg} color={Colors.white} />
             {unreadCount > 0 && (
               <View style={styles.bellBadge}>
                 <Text style={styles.bellBadgeText}>{unreadCount > 9 ? '9+' : unreadCount}</Text>
@@ -142,7 +140,10 @@ export default function ProfileScreen(_props: Props) {
             onPress={() => stackNavigation.navigate('EditProfile')}
             hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
           >
-            <Text style={styles.editBtn}>Edit ✏️</Text>
+            <View style={styles.editBtnRow}>
+              <Text style={styles.editBtn}>Edit</Text>
+              <AppIcon name={Icons.edit} size={IconSize.sm} color={Colors.primary200} />
+            </View>
           </TouchableOpacity>
         </View>
       </View>
@@ -171,7 +172,11 @@ export default function ProfileScreen(_props: Props) {
             <Text style={styles.name}>{displayUser?.name}</Text>
             <Text style={styles.phone}>{formatPhone(displayUser?.phone ?? '')}</Text>
             <View style={styles.rolePill}>
-              <Text style={styles.roleEmoji}>{isDriver ? '🚗' : '🎒'}</Text>
+              <AppIcon
+                name={isDriver ? Icons.car : Icons.passenger}
+                size={IconSize.sm}
+                color={Colors.primaryDeep}
+              />
               <Text style={styles.roleLabel}>{isDriver ? 'Driver' : 'Passenger'}</Text>
             </View>
           </View>
@@ -189,19 +194,19 @@ export default function ProfileScreen(_props: Props) {
 
         <View style={styles.statsRow}>
           <StatCard
-            emoji={isDriver ? '🚗' : '🎒'}
+            icon={isDriver ? Icons.car : Icons.passenger}
             value={displayUser?.totalRides ?? 0}
             label={isDriver ? 'Rides offered' : 'Rides taken'}
           />
           <StatCard
-            emoji="⭐"
+            icon={Icons.star}
             value={
               (displayUser?.avgRating ?? 0) > 0 ? formatRating(displayUser?.avgRating ?? 0) : '—'
             }
             label="Avg rating"
           />
           <StatCard
-            emoji="📅"
+            icon={Icons.calendar}
             value={displayUser?.createdAt ? new Date(displayUser.createdAt).getFullYear() : '—'}
             label="Member since"
           />
@@ -218,7 +223,7 @@ export default function ProfileScreen(_props: Props) {
                 activeOpacity={0.85}
               >
                 <View style={styles.pendingLeft}>
-                  <Text style={styles.pendingEmoji}>⭐</Text>
+                  <AppIcon name={Icons.star} size={IconSize.lg} color={Colors.accent} />
                   <View>
                     <Text style={styles.pendingName}>Rate {item.rateeName}</Text>
                     <Text style={styles.pendingRoute}>
@@ -226,7 +231,7 @@ export default function ProfileScreen(_props: Props) {
                     </Text>
                   </View>
                 </View>
-                <Text style={styles.pendingArrow}>→</Text>
+                <AppIcon name={Icons.forward} size={IconSize.lg} color={Colors.accent} />
               </TouchableOpacity>
             ))}
           </View>
@@ -237,7 +242,7 @@ export default function ProfileScreen(_props: Props) {
             <Text style={styles.sectionTitle}>Your vehicle</Text>
             {displayUser?.vehicle ? (
               <View style={styles.vehicleCard}>
-                <Text style={styles.vehicleEmoji}>🚗</Text>
+                <AppIcon name={Icons.carSport} size={IconSize.xl} color={Colors.primary} />
                 <View style={styles.vehicleInfo}>
                   <Text style={styles.vehicleName}>
                     {displayUser.vehicle.make} {displayUser.vehicle.model}
@@ -255,7 +260,7 @@ export default function ProfileScreen(_props: Props) {
                 style={styles.addVehicleCard}
                 onPress={() => stackNavigation.navigate('EditProfile')}
               >
-                <Text style={styles.addVehicleEmoji}>➕</Text>
+                <AppIcon name={Icons.add} size={IconSize.lg} color={Colors.primary} />
                 <Text style={styles.addVehicleText}>Add vehicle details</Text>
               </TouchableOpacity>
             )}
@@ -287,7 +292,12 @@ export default function ProfileScreen(_props: Props) {
             onPress={handleSwitchRole}
             disabled={isSwitching}
           >
-            <Text style={styles.actionEmoji}>{isDriver ? '🎒' : '🚗'}</Text>
+            <AppIcon
+              name={isDriver ? Icons.passenger : Icons.car}
+              size={IconSize.lg}
+              color={Colors.textSecondary}
+              style={styles.actionIcon}
+            />
             <Text style={styles.actionLabel}>
               {isSwitching ? 'Switching…' : isDriver ? 'Switch to passenger' : 'Switch to driver'}
             </Text>
@@ -295,14 +305,19 @@ export default function ProfileScreen(_props: Props) {
           </TouchableOpacity>
 
           <TouchableOpacity style={[styles.actionRow, styles.signOutRow]} onPress={handleSignOut}>
-            <Text style={styles.actionEmoji}>🚪</Text>
+            <AppIcon
+              name={Icons.logOut}
+              size={IconSize.lg}
+              color={Colors.error}
+              style={styles.actionIcon}
+            />
             <Text style={[styles.actionLabel, styles.signOutLabel]}>Sign out</Text>
           </TouchableOpacity>
         </View>
 
         <Text style={styles.version}>SaathiRide v1.0.0 (MVP)</Text>
       </ScrollView>
-    </SafeAreaView>
+    </ScreenWrapper>
   );
 }
 
@@ -332,7 +347,16 @@ const styles = StyleSheet.create({
   bellBtn: {
     position: 'relative',
   },
-  bellIcon: { fontSize: 22 },
+  editBtnRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+  },
+  editBtn: {
+    fontFamily: FontFamily.bodyMedium,
+    fontSize: FontSize.sm,
+    color: Colors.primary200,
+  },
   bellBadge: {
     position: 'absolute',
     top: -4,
@@ -351,11 +375,6 @@ const styles = StyleSheet.create({
     fontFamily: FontFamily.bodyBold,
     fontSize: 9,
     color: Colors.white,
-  },
-  editBtn: {
-    fontFamily: FontFamily.bodyMedium,
-    fontSize: FontSize.sm,
-    color: Colors.primary200,
   },
 
   scroll: {
@@ -396,7 +415,6 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
     marginTop: Spacing.xs,
   },
-  roleEmoji: { fontSize: 13 },
   roleLabel: {
     fontFamily: FontFamily.bodySemiBold,
     fontSize: FontSize.xs,
@@ -460,7 +478,6 @@ const styles = StyleSheet.create({
     gap: Spacing.md,
     flex: 1,
   },
-  pendingEmoji: { fontSize: 22 },
   pendingName: {
     fontFamily: FontFamily.bodySemiBold,
     fontSize: FontSize.base,
@@ -470,11 +487,6 @@ const styles = StyleSheet.create({
     fontFamily: FontFamily.body,
     fontSize: FontSize.xs,
     color: Colors.textMuted,
-  },
-  pendingArrow: {
-    fontFamily: FontFamily.bodyBold,
-    fontSize: FontSize.lg,
-    color: Colors.accent,
   },
 
   vehicleCard: {
@@ -487,7 +499,6 @@ const styles = StyleSheet.create({
     borderWidth: 0.5,
     borderColor: Colors.border,
   },
-  vehicleEmoji: { fontSize: 28 },
   vehicleInfo: { flex: 1 },
   vehicleName: {
     fontFamily: FontFamily.bodySemiBold,
@@ -516,7 +527,6 @@ const styles = StyleSheet.create({
     borderStyle: 'dashed',
     borderColor: Colors.primary200,
   },
-  addVehicleEmoji: { fontSize: 22 },
   addVehicleText: {
     fontFamily: FontFamily.bodyMedium,
     fontSize: FontSize.base,
@@ -541,7 +551,7 @@ const styles = StyleSheet.create({
     gap: Spacing.md,
     paddingVertical: Spacing.sm,
   },
-  actionEmoji: { fontSize: 20, width: 28 },
+  actionIcon: { width: 28 },
   actionLabel: {
     flex: 1,
     fontFamily: FontFamily.bodyMedium,

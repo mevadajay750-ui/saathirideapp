@@ -3,15 +3,14 @@ import {
   View,
   Text,
   StyleSheet,
-  SafeAreaView,
-  StatusBar,
   ScrollView,
   TouchableOpacity,
   RefreshControl,
   ActivityIndicator,
   Alert,
 } from 'react-native';
-import { Colors, FontFamily, FontSize, Spacing, BorderRadius } from '@/theme';
+import { Colors, FontFamily, FontSize, Spacing, BorderRadius, IconSize, Icons } from '@/theme';
+import { AppIcon, ScreenWrapper } from '@/components/common';
 import { BookingRequestCard } from '@/components/driver/BookingRequestCard';
 import { RideStatusBadge } from '@/components/driver/RideStatusBadge';
 import {
@@ -80,21 +79,21 @@ export default function RideDetailScreen({ route, navigation }: Props) {
 
   if (rideLoading) {
     return (
-      <SafeAreaView style={styles.safe}>
+      <ScreenWrapper statusBar="brand" contentStyle={styles.safe}>
         <View style={styles.loader}>
           <ActivityIndicator color={Colors.primary} size="large" />
         </View>
-      </SafeAreaView>
+      </ScreenWrapper>
     );
   }
 
   if (!ride) {
     return (
-      <SafeAreaView style={styles.safe}>
+      <ScreenWrapper statusBar="brand" contentStyle={styles.safe}>
         <View style={styles.loader}>
           <Text style={styles.errorText}>Ride not found</Text>
         </View>
-      </SafeAreaView>
+      </ScreenWrapper>
     );
   }
 
@@ -102,8 +101,7 @@ export default function RideDetailScreen({ route, navigation }: Props) {
   const isActive = ride.status === 'active';
 
   return (
-    <SafeAreaView style={styles.safe}>
-      <StatusBar barStyle="light-content" backgroundColor={Colors.primary} />
+    <ScreenWrapper statusBar="brand" contentStyle={styles.safe}>
 
       <View style={styles.header}>
         <TouchableOpacity
@@ -150,19 +148,19 @@ export default function RideDetailScreen({ route, navigation }: Props) {
 
           <View style={styles.detailGrid}>
             <View style={styles.detailItem}>
-              <Text style={styles.detailEmoji}>📅</Text>
+              <AppIcon name={Icons.calendar} size={IconSize.lg} color={Colors.textSecondary} />
               <Text style={styles.detailLabel}>Departure</Text>
               <Text style={styles.detailValue}>{formatDepartureDate(ride.departureAt)}</Text>
             </View>
             <View style={styles.detailItem}>
-              <Text style={styles.detailEmoji}>💺</Text>
+              <AppIcon name={Icons.seat} size={IconSize.lg} color={Colors.textSecondary} />
               <Text style={styles.detailLabel}>Seats</Text>
               <Text style={styles.detailValue}>
                 {seatsUsed}/{ride.totalSeats} booked
               </Text>
             </View>
             <View style={styles.detailItem}>
-              <Text style={styles.detailEmoji}>₹</Text>
+              <Text style={styles.detailCurrency}>₹</Text>
               <Text style={styles.detailLabel}>Price</Text>
               <Text style={[styles.detailValue, { color: Colors.primary }]}>
                 {formatPrice(ride.pricePerSeat)}/seat
@@ -253,7 +251,8 @@ export default function RideDetailScreen({ route, navigation }: Props) {
                   </View>
                 </View>
                 <View style={styles.confirmedBadge}>
-                  <Text style={styles.confirmedBadgeText}>✓ Confirmed</Text>
+                  <AppIcon name={Icons.check} size={IconSize.sm} color={Colors.successDark} />
+                  <Text style={styles.confirmedBadgeText}>Confirmed</Text>
                 </View>
               </View>
             ))}
@@ -264,7 +263,7 @@ export default function RideDetailScreen({ route, navigation }: Props) {
           (bookings?.pending?.length ?? 0) === 0 &&
           (bookings?.confirmed?.length ?? 0) === 0 && (
             <View style={styles.noActivity}>
-              <Text style={styles.noActivityEmoji}>⏳</Text>
+              <AppIcon name={Icons.hourglass} size={IconSize['2xl']} color={Colors.gray400} />
               <Text style={styles.noActivityTitle}>Waiting for passengers</Text>
               <Text style={styles.noActivityBody}>
                 Your ride is live. Passengers searching this route will see it and can send booking
@@ -285,7 +284,7 @@ export default function RideDetailScreen({ route, navigation }: Props) {
           </TouchableOpacity>
         )}
       </ScrollView>
-    </SafeAreaView>
+    </ScreenWrapper>
   );
 }
 
@@ -364,7 +363,12 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.md,
   },
   detailItem: { alignItems: 'center', flex: 1 },
-  detailEmoji: { fontSize: 20, marginBottom: 4 },
+  detailCurrency: {
+    fontFamily: FontFamily.heading,
+    fontSize: FontSize.lg,
+    color: Colors.primaryDeep,
+    marginBottom: 4,
+  },
   detailLabel: {
     fontFamily: FontFamily.body,
     fontSize: FontSize.xs,
@@ -498,6 +502,9 @@ const styles = StyleSheet.create({
     color: Colors.textMuted,
   },
   confirmedBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
     backgroundColor: Colors.successLight,
     paddingHorizontal: Spacing.sm,
     paddingVertical: 3,
@@ -514,7 +521,6 @@ const styles = StyleSheet.create({
     paddingVertical: Spacing['3xl'],
     gap: Spacing.md,
   },
-  noActivityEmoji: { fontSize: 48 },
   noActivityTitle: {
     fontFamily: FontFamily.headingSemiBold,
     fontSize: FontSize.lg,

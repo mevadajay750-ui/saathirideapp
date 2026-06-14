@@ -6,7 +6,7 @@ import {
   uploadPhoto,
 } from '@/services/profile.service';
 import { useAuthStore } from '@/store/auth.store';
-import { AuthUser, UserRole } from '@/types';
+import { AuthUser, UserRole, setNavigationRole } from '@/types';
 
 export const PROFILE_KEYS = {
   profile: ['profile'] as const,
@@ -81,6 +81,9 @@ export function useSwitchRole() {
   return useMutation({
     mutationFn: (role: UserRole) => updateProfile({ role }),
     onSuccess: (updatedUser: AuthUser) => {
+      if (updatedUser.role === 'driver' || updatedUser.role === 'passenger') {
+        setNavigationRole(updatedUser.role);
+      }
       setUser(updatedUser);
       queryClient.setQueryData(PROFILE_KEYS.profile, updatedUser);
       queryClient.clear();

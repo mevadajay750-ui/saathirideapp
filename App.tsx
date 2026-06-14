@@ -36,7 +36,11 @@ export default function App() {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaProvider>
         <ThemeProvider>
-          <StatusBar barStyle="dark-content" backgroundColor={Colors.white} />
+          <StatusBar
+            barStyle="dark-content"
+            backgroundColor={Colors.white}
+            translucent={false}
+          />
           <QueryClientProvider client={queryClient}>
             <AppBootstrap />
           </QueryClientProvider>

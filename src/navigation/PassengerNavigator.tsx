@@ -1,6 +1,7 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Text, View, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import { PassengerTabParamList } from './types';
 import PassengerHomeScreen from '@/screens/passenger/PassengerHomeScreen';
 import MyBookingsScreen from '@/screens/passenger/MyBookingsScreen';
@@ -11,10 +12,10 @@ import { useNotificationStore } from '@/hooks/useNotificationStore';
 
 const Tab = createBottomTabNavigator<PassengerTabParamList>();
 
-const TAB_ICONS: Record<string, { active: string; inactive: string }> = {
-  PassengerHome: { active: '🏠', inactive: '🏠' },
-  MyBookings: { active: '🎟️', inactive: '🎟️' },
-  Profile: { active: '👤', inactive: '👤' },
+const TAB_ICONS: Record<string, React.ComponentProps<typeof Ionicons>['name']> = {
+  PassengerHome: 'home-outline',
+  MyBookings: 'ticket-outline',
+  Profile: 'person-outline',
 };
 
 export default function PassengerNavigator() {
@@ -28,11 +29,9 @@ export default function PassengerNavigator() {
         tabBarActiveTintColor: Colors.primary,
         tabBarInactiveTintColor: Colors.gray400,
         tabBarLabelStyle: styles.tabLabel,
-        tabBarIcon: ({ focused }) => (
+        tabBarIcon: ({ color, size }) => (
           <View>
-            <Text style={styles.tabIcon}>
-              {focused ? TAB_ICONS[route.name]?.active : TAB_ICONS[route.name]?.inactive}
-            </Text>
+            <Ionicons name={TAB_ICONS[route.name]} size={size ?? 22} color={color} />
             {route.name === 'Profile' && unreadCount > 0 && (
               <NotificationBadge count={unreadCount} />
             )}
@@ -67,8 +66,5 @@ const styles = StyleSheet.create({
   tabLabel: {
     fontFamily: FontFamily.bodyMedium,
     fontSize: FontSize.xs,
-  },
-  tabIcon: {
-    fontSize: 22,
   },
 });

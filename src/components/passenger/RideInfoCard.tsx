@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { Colors, FontFamily, FontSize, Spacing, BorderRadius } from '@/theme';
+import { Colors, FontFamily, FontSize, Spacing, BorderRadius, IconSize, Icons } from '@/theme';
+import { AppIcon } from '@/components/common/AppIcon';
 import { Ride } from '@/types';
 import { formatDepartureDate, formatPrice } from '@/utils/formatters';
 import { DriverAvatar } from './DriverAvatar';
@@ -47,13 +48,13 @@ export function RideInfoCard({ ride, seatsRequested }: Props) {
 
       <View style={styles.metaGrid}>
         <View style={styles.metaItem}>
-          <Text style={styles.metaEmoji}>📅</Text>
+          <AppIcon name={Icons.calendar} size={IconSize.lg} color={Colors.textSecondary} />
           <Text style={styles.metaLabel}>Departure</Text>
           <Text style={styles.metaValue}>{formatDepartureDate(ride.departureAt)}</Text>
         </View>
         <View style={styles.metaItemDivider} />
         <View style={styles.metaItem}>
-          <Text style={styles.metaEmoji}>💺</Text>
+          <AppIcon name={Icons.seat} size={IconSize.lg} color={Colors.textSecondary} />
           <Text style={styles.metaLabel}>Your seats</Text>
           <Text style={styles.metaValue}>
             {seatsRequested} of {ride.seatsAvailable} left
@@ -61,7 +62,7 @@ export function RideInfoCard({ ride, seatsRequested }: Props) {
         </View>
         <View style={styles.metaItemDivider} />
         <View style={styles.metaItem}>
-          <Text style={styles.metaEmoji}>💵</Text>
+          <AppIcon name={Icons.cash} size={IconSize.lg} color={Colors.textSecondary} />
           <Text style={styles.metaLabel}>Total</Text>
           <Text style={[styles.metaValue, styles.metaPrice]}>{formatPrice(totalPrice)}</Text>
         </View>
@@ -84,7 +85,7 @@ export function RideInfoCard({ ride, seatsRequested }: Props) {
       <View style={styles.vehicleSection}>
         <Text style={styles.vehicleLabel}>Vehicle</Text>
         <View style={styles.vehicleRow}>
-          <Text style={styles.vehicleEmoji}>🚗</Text>
+          <AppIcon name={Icons.carSport} size={IconSize.xl} color={Colors.primary} />
           <View>
             <Text style={styles.vehicleName}>
               {ride.vehicle.make} {ride.vehicle.model}
@@ -203,7 +204,6 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.divider,
     alignSelf: 'stretch',
   },
-  metaEmoji: { fontSize: 18 },
   metaLabel: {
     fontFamily: FontFamily.body,
     fontSize: FontSize.xs,
@@ -247,7 +247,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: Spacing.md,
   },
-  vehicleEmoji: { fontSize: 28 },
   vehicleName: {
     fontFamily: FontFamily.bodySemiBold,
     fontSize: FontSize.base,

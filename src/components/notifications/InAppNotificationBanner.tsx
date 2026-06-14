@@ -1,7 +1,8 @@
 import React, { useEffect, useMemo, useRef, useState, useCallback } from 'react';
 import { Animated, View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Colors, FontFamily, FontSize, Spacing, BorderRadius, Shadow } from '@/theme';
+import { Colors, FontFamily, FontSize, Spacing, BorderRadius, Shadow, IconSize, Icons } from '@/theme';
+import { AppIcon } from '@/components/common/AppIcon';
 import { NotifPayload, setForegroundNotifHandler } from '@/services/notification.service';
 import { navigateFromNotification } from '@/utils/notificationNavigation';
 
@@ -59,7 +60,7 @@ export function InAppNotificationBanner() {
         <TouchableOpacity style={styles.banner} onPress={handleTap} activeOpacity={0.92}>
           <View style={styles.left}>
             <View style={styles.appIcon}>
-              <Text style={styles.appIconText}>🚗</Text>
+              <AppIcon name={Icons.carSport} size={IconSize.lg} color={Colors.primary} />
             </View>
             <View style={styles.textBlock}>
               <Text style={styles.title} numberOfLines={1}>
@@ -71,7 +72,7 @@ export function InAppNotificationBanner() {
             </View>
           </View>
           <TouchableOpacity onPress={dismiss} hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
-            <Text style={styles.closeBtn}>✕</Text>
+            <AppIcon name={Icons.close} size={IconSize.lg} color={Colors.textMuted} />
           </TouchableOpacity>
         </TouchableOpacity>
       </SafeAreaView>
@@ -115,7 +116,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flexShrink: 0,
   },
-  appIconText: { fontSize: 22 },
   textBlock: { flex: 1 },
   title: {
     fontFamily: FontFamily.bodySemiBold,
@@ -128,11 +128,5 @@ const styles = StyleSheet.create({
     fontSize: FontSize.sm,
     color: Colors.textSecondary,
     lineHeight: FontSize.sm * 1.4,
-  },
-  closeBtn: {
-    fontFamily: FontFamily.body,
-    fontSize: FontSize.base,
-    color: Colors.textMuted,
-    paddingLeft: Spacing.sm,
   },
 });

@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Platform } from 'react-native';
 import RNDateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import { format, isToday, isTomorrow } from 'date-fns';
-import { Colors, FontFamily, FontSize, Spacing, BorderRadius } from '@/theme';
+import { Colors, FontFamily, FontSize, Spacing, BorderRadius, IconSize, Icons } from '@/theme';
+import type { AppIconName } from '@/theme';
+import { AppIcon } from '@/components/common/AppIcon';
 
 interface DateTimePickerProps {
   label: string;
@@ -11,7 +13,7 @@ interface DateTimePickerProps {
   mode: 'date' | 'time';
   minimumDate?: Date;
   error?: string;
-  icon?: string;
+  icon?: AppIconName;
 }
 
 export function DateTimePicker({
@@ -21,7 +23,7 @@ export function DateTimePicker({
   mode,
   minimumDate,
   error,
-  icon = mode === 'date' ? '📅' : '🕐',
+  icon = mode === 'date' ? Icons.calendar : Icons.time,
 }: DateTimePickerProps) {
   const [showPicker, setShowPicker] = useState(false);
 
@@ -48,7 +50,7 @@ export function DateTimePicker({
         onPress={() => setShowPicker(true)}
         activeOpacity={0.75}
       >
-        <Text style={styles.icon}>{icon}</Text>
+        <AppIcon name={icon} size={IconSize.lg} color={Colors.textSecondary} />
         <Text style={[styles.triggerText, !value && styles.triggerPlaceholder]}>
           {formatValue(value)}
         </Text>
@@ -97,9 +99,6 @@ const styles = StyleSheet.create({
   },
   triggerError: {
     borderColor: Colors.error,
-  },
-  icon: {
-    fontSize: 18,
   },
   triggerText: {
     fontFamily: FontFamily.bodyMedium,

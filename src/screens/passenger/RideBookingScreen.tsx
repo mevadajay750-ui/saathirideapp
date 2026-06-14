@@ -3,8 +3,6 @@ import {
   View,
   Text,
   StyleSheet,
-  SafeAreaView,
-  StatusBar,
   ScrollView,
   TouchableOpacity,
   ActivityIndicator,
@@ -12,8 +10,9 @@ import {
 } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
-import { Colors, FontFamily, FontSize, Spacing, BorderRadius } from '@/theme';
-import { Button } from '@/components/common';
+import { Colors, FontFamily, FontSize, Spacing, BorderRadius, IconSize, Icons } from '@/theme';
+import type { AppIconName } from '@/theme';
+import { AppIcon, Button, ScreenWrapper } from '@/components/common';
 import { BottomSheetRef } from '@/components/common/BottomSheet';
 import { RideInfoCard } from '@/components/passenger/RideInfoCard';
 import { BookingConfirmedSheet } from '@/components/passenger/BookingConfirmedSheet';
@@ -82,26 +81,26 @@ export default function RideBookingScreen({ route, navigation }: Props) {
 
   if (isLoading) {
     return (
-      <SafeAreaView style={styles.safe}>
+      <ScreenWrapper statusBar="brand" contentStyle={styles.safe}>
         <View style={styles.loader}>
           <ActivityIndicator color={Colors.primary} size="large" />
           <Text style={styles.loaderText}>Loading ride details…</Text>
         </View>
-      </SafeAreaView>
+      </ScreenWrapper>
     );
   }
 
   if (error || !ride) {
     return (
-      <SafeAreaView style={styles.safe}>
+      <ScreenWrapper statusBar="brand" contentStyle={styles.safe}>
         <View style={styles.loader}>
-          <Text style={styles.errorEmoji}>⚠️</Text>
+          <AppIcon name={Icons.warning} size={IconSize['2xl']} color={Colors.textMuted} />
           <Text style={styles.errorText}>Could not load ride details</Text>
           <TouchableOpacity onPress={() => navigation.goBack()} style={styles.goBackBtn}>
             <Text style={styles.goBackText}>Go back</Text>
           </TouchableOpacity>
         </View>
-      </SafeAreaView>
+      </ScreenWrapper>
     );
   }
 
@@ -111,8 +110,7 @@ export default function RideBookingScreen({ route, navigation }: Props) {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <BottomSheetModalProvider>
-        <SafeAreaView style={styles.safe}>
-          <StatusBar barStyle="light-content" backgroundColor={Colors.primary} />
+        <ScreenWrapper statusBar="brand" contentStyle={styles.safe}>
 
           <View style={styles.header}>
             <TouchableOpacity
@@ -130,7 +128,7 @@ export default function RideBookingScreen({ route, navigation }: Props) {
 
             {!seatsOk && (
               <View style={styles.warningBanner}>
-                <Text style={styles.warningEmoji}>⚠️</Text>
+                <AppIcon name={Icons.warning} size={IconSize.lg} color={Colors.warningDark} />
                 <Text style={styles.warningText}>
                   Only {ride.seatsAvailable} seat
                   {ride.seatsAvailable !== 1 ? 's' : ''} available. Adjust your search to book this
@@ -140,7 +138,7 @@ export default function RideBookingScreen({ route, navigation }: Props) {
             )}
 
             <View style={styles.cashNote}>
-              <Text style={styles.cashNoteEmoji}>💵</Text>
+              <AppIcon name={Icons.cash} size={IconSize.lg} color={Colors.accentDark} />
               <Text style={styles.cashNoteText}>
                 Payment is in cash — pay{' '}
                 <Text style={{ fontFamily: FontFamily.bodySemiBold, color: Colors.accentDark }}>
@@ -152,20 +150,22 @@ export default function RideBookingScreen({ route, navigation }: Props) {
 
             <View style={styles.stepsCard}>
               <Text style={styles.stepsTitle}>What happens next?</Text>
-              {[
-                { emoji: '📨', text: `Your request is sent to ${ride.driverName}` },
-                { emoji: '🔔', text: "You'll get notified when they accept or decline" },
-                { emoji: '📱', text: "Once confirmed, you'll see the driver's phone number" },
-                {
-                  emoji: '💵',
-                  text: `Pay ${formatPrice(totalPrice)} cash to the driver at the pickup point`,
-                },
-              ].map((step, i) => (
+              {(
+                [
+                  { icon: Icons.mail, text: `Your request is sent to ${ride.driverName}` },
+                  { icon: Icons.bell, text: "You'll get notified when they accept or decline" },
+                  { icon: Icons.phone, text: "Once confirmed, you'll see the driver's phone number" },
+                  {
+                    icon: Icons.cash,
+                    text: `Pay ${formatPrice(totalPrice)} cash to the driver at the pickup point`,
+                  },
+                ] as { icon: AppIconName; text: string }[]
+              ).map((step, i) => (
                 <View key={i} style={styles.stepRow}>
                   <View style={styles.stepNumWrap}>
                     <Text style={styles.stepNum}>{i + 1}</Text>
                   </View>
-                  <Text style={styles.stepEmoji}>{step.emoji}</Text>
+                  <AppIcon name={step.icon} size={IconSize.md} color={Colors.textSecondary} />
                   <Text style={styles.stepText}>{step.text}</Text>
                 </View>
               ))}
@@ -200,7 +200,7 @@ export default function RideBookingScreen({ route, navigation }: Props) {
             onViewBookings={handleViewBookings}
             onGoHome={handleGoHome}
           />
-        </SafeAreaView>
+        </ScreenWrapper>
       </BottomSheetModalProvider>
     </GestureHandlerRootView>
   );
@@ -219,7 +219,6 @@ const styles = StyleSheet.create({
     fontSize: FontSize.base,
     color: Colors.textMuted,
   },
-  errorEmoji: { fontSize: 48 },
   errorText: {
     fontFamily: FontFamily.bodyMedium,
     fontSize: FontSize.base,
@@ -270,7 +269,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: Colors.warning,
   },
-  warningEmoji: { fontSize: 18 },
   warningText: {
     flex: 1,
     fontFamily: FontFamily.body,
@@ -288,7 +286,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#FDCFA4',
   },
-  cashNoteEmoji: { fontSize: 18 },
   cashNoteText: {
     flex: 1,
     fontFamily: FontFamily.body,
@@ -328,7 +325,6 @@ const styles = StyleSheet.create({
     fontSize: 11,
     color: Colors.white,
   },
-  stepEmoji: { fontSize: 16 },
   stepText: {
     flex: 1,
     fontFamily: FontFamily.body,

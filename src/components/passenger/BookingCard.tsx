@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
-import { Colors, FontFamily, FontSize, Spacing, BorderRadius, Shadow } from '@/theme';
+import { Colors, FontFamily, FontSize, Spacing, BorderRadius, Shadow, IconSize, Icons } from '@/theme';
+import { AppIcon } from '@/components/common/AppIcon';
 import { Booking } from '@/types';
 import { BookingStatusBadge } from './BookingStatusBadge';
 import { DriverAvatar } from './DriverAvatar';
@@ -83,17 +84,20 @@ export function BookingCard({ booking, onCancel, isCancelling }: Props) {
 
       {isConfirmed && ride?.driverPhone && (
         <View style={styles.phoneRow}>
-          <Text style={styles.phoneEmoji}>📱</Text>
+          <AppIcon name={Icons.phone} size={IconSize.sm} color={Colors.textMuted} />
           <Text style={styles.phoneLabel}>Driver&apos;s number: </Text>
           <Text style={styles.phoneNumber}>{ride.driverPhone}</Text>
         </View>
       )}
 
       <View style={styles.bottomRow}>
-        <Text style={styles.seatsChip}>
-          💺 {booking.seatsRequested} seat
-          {booking.seatsRequested !== 1 ? 's' : ''}
-        </Text>
+        <View style={styles.seatsChip}>
+          <AppIcon name={Icons.seat} size={IconSize.sm} color={Colors.textSecondary} />
+          <Text style={styles.seatsChipText}>
+            {booking.seatsRequested} seat
+            {booking.seatsRequested !== 1 ? 's' : ''}
+          </Text>
+        </View>
 
         {canCancel && onCancel && (
           <TouchableOpacity
@@ -171,7 +175,6 @@ const styles = StyleSheet.create({
     paddingBottom: Spacing.sm,
     gap: Spacing.xs,
   },
-  phoneEmoji: { fontSize: 14 },
   phoneLabel: {
     fontFamily: FontFamily.body,
     fontSize: FontSize.sm,
@@ -191,6 +194,11 @@ const styles = StyleSheet.create({
     paddingBottom: Spacing.base,
   },
   seatsChip: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+  },
+  seatsChipText: {
     fontFamily: FontFamily.bodyMedium,
     fontSize: FontSize.sm,
     color: Colors.textSecondary,

@@ -1,5 +1,6 @@
 import { apiClient } from '@/api/client';
 import { Endpoints } from '@/api/endpoints';
+import { BackendUser, BackendVehicle, mapUser, mapVehicle, toApiVehiclePayload } from '@/api/mappers';
 import { AuthUser, Vehicle, UserRole } from '@/types';
 
 export interface UpdateProfilePayload {
@@ -11,38 +12,34 @@ export interface UpdateProfilePayload {
 export interface UpdateVehiclePayload {
   make: string;
   model: string;
+  year: number;
   color: string;
   plateNumber: string;
+  totalSeats: number;
 }
 
-/** Fetch latest profile from server */
 export async function fetchProfile(): Promise<AuthUser> {
-  const response = await apiClient.get(Endpoints.USER_ME);
-  return response.data.user;
+  const response = await apiClient.get<BackendUser>(Endpoints.USER_ME);
+  return mapUser(response.data);
 }
 
-/** Update name / photo / role */
 export async function updateProfile(payload: UpdateProfilePayload): Promise<AuthUser> {
-  const response = await apiClient.put(Endpoints.USER_UPDATE, {
+  const response = await apiClient.put<BackendUser>(Endpoints.USER_UPDATE, {
     name: payload.name,
-    photo_url: payload.photoUrl,
+    avatar_url: payload.photoUrl,
     role: payload.role,
   });
-  return response.data.user;
+  return mapUser(response.data);
 }
 
-/** Save / update vehicle details (drivers only) */
 export async function upsertVehicle(payload: UpdateVehiclePayload): Promise<Vehicle> {
-  const response = await apiClient.post(Endpoints.VEHICLES_CREATE, {
-    make: payload.make,
-    model: payload.model,
-    color: payload.color,
-    plate_number: payload.plateNumber.toUpperCase(),
-  });
-  return response.data.vehicle;
+  const response = await apiClient.put<BackendVehicle>(
+    Endpoints.VEHICLE_UPSERT,
+    toApiVehiclePayload(payload),
+  );
+  return mapVehicle(response.data);
 }
 
-/** Upload profile photo, return CDN URL */
 export async function uploadPhoto(localUri: string, userId: string): Promise<string> {
   const storage = (await import('@react-native-firebase/storage')).default;
   const ref = storage().ref(`profile_photos/${userId}_${Date.now()}.jpg`);

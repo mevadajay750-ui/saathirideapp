@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { Colors, FontFamily, FontSize, Spacing, BorderRadius, Shadow } from '@/theme';
+import { Colors, FontFamily, FontSize, Spacing, BorderRadius, Shadow, IconSize, Icons } from '@/theme';
+import { AppIcon } from '@/components/common/AppIcon';
 import { Ride } from '@/types';
 import { formatDepartureDate, formatPrice } from '@/utils/formatters';
 import { DriverAvatar } from './DriverAvatar';
@@ -56,27 +57,28 @@ export function RideResultCard({ ride, seatsRequested, onPress }: Props) {
 
       <View style={styles.metaRow}>
         <View style={styles.chip}>
-          <Text style={styles.chipEmoji}>💺</Text>
+          <AppIcon name={Icons.seat} size={IconSize.sm} color={Colors.textSecondary} />
           <Text style={[styles.chipText, isAlmostFull && { color: Colors.accentDark }]}>
             {ride.seatsAvailable} seat{ride.seatsAvailable !== 1 ? 's' : ''} left
           </Text>
         </View>
 
         <View style={styles.chip}>
-          <Text style={styles.chipEmoji}>🚗</Text>
+          <AppIcon name={Icons.car} size={IconSize.sm} color={Colors.textSecondary} />
           <Text style={styles.chipText} numberOfLines={1}>
             {ride.vehicle.make} {ride.vehicle.model}
           </Text>
         </View>
 
         <View style={styles.chip}>
-          <Text style={styles.chipEmoji}>🎨</Text>
+          <AppIcon name={Icons.palette} size={IconSize.sm} color={Colors.textSecondary} />
           <Text style={styles.chipText}>{ride.vehicle.color}</Text>
         </View>
       </View>
 
       <View style={styles.ctaRow}>
-        <Text style={styles.ctaText}>View ride →</Text>
+        <Text style={styles.ctaText}>View ride</Text>
+        <AppIcon name={Icons.forward} size={IconSize.sm} color={Colors.primary} />
       </View>
     </TouchableOpacity>
   );
@@ -168,17 +170,19 @@ const styles = StyleSheet.create({
     borderWidth: 0.5,
     borderColor: Colors.gray200,
   },
-  chipEmoji: { fontSize: 11 },
   chipText: {
     fontFamily: FontFamily.bodyMedium,
     fontSize: FontSize.xs,
     color: Colors.textSecondary,
   },
   ctaRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    gap: 4,
     backgroundColor: Colors.primaryLight,
     paddingHorizontal: Spacing.base,
     paddingVertical: Spacing.sm,
-    alignItems: 'flex-end',
   },
   ctaText: {
     fontFamily: FontFamily.bodySemiBold,

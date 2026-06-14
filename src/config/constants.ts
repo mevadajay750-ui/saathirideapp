@@ -4,7 +4,7 @@ import Config from 'react-native-config';
 export const APP_NAME = 'SaathiRide';
 export const APP_VERSION = '1.0.0';
 
-export const API_BASE_URL = Config.API_BASE_URL ?? 'http://localhost:3000/v1';
+export const API_BASE_URL = Config.API_BASE_URL ?? 'http://localhost:3000/api/v1';
 
 export const OTP_LENGTH = 6;
 export const OTP_EXPIRY_SECONDS = 300;

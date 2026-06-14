@@ -1,17 +1,19 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { Colors, FontFamily, FontSize, Spacing, BorderRadius } from '@/theme';
+import { Colors, FontFamily, FontSize, Spacing, BorderRadius, IconSize } from '@/theme';
+import type { AppIconName } from '@/theme';
+import { AppIcon } from '@/components/common/AppIcon';
 
 interface Props {
-  emoji: string;
+  icon: AppIconName;
   value: string | number;
   label: string;
 }
 
-export function StatCard({ emoji, value, label }: Props) {
+export function StatCard({ icon, value, label }: Props) {
   return (
     <View style={styles.card}>
-      <Text style={styles.emoji}>{emoji}</Text>
+      <AppIcon name={icon} size={IconSize.lg} color={Colors.primary} />
       <Text style={styles.value}>{value}</Text>
       <Text style={styles.label}>{label}</Text>
     </View>
@@ -29,7 +31,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: Spacing.xs,
   },
-  emoji: { fontSize: 24 },
   value: {
     fontFamily: FontFamily.heading,
     fontSize: FontSize.xl,

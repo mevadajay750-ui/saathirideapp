@@ -1,7 +1,8 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { format } from 'date-fns';
-import { Colors, FontFamily, FontSize, Spacing, BorderRadius } from '@/theme';
+import { Colors, FontFamily, FontSize, Spacing, BorderRadius, IconSize, Icons } from '@/theme';
+import { AppIcon } from '@/components/common/AppIcon';
 import { CityPicker } from '@/components/driver/CityPicker';
 import { DateTimePicker } from '@/components/driver/DateTimePicker';
 import { SeatsStepper } from '@/components/driver/SeatsStepper';
@@ -44,7 +45,7 @@ export function SearchForm({
           <Text style={styles.compactMetaText}>
             {params.seats} seat{params.seats !== 1 ? 's' : ''}
           </Text>
-          <Text style={styles.compactEdit}>✏️</Text>
+          <AppIcon name={Icons.edit} size={IconSize.sm} color={Colors.textMuted} />
         </View>
       </TouchableOpacity>
     );
@@ -72,7 +73,7 @@ export function SearchForm({
           }}
           hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
         >
-          <Text style={styles.swapIcon}>⇅</Text>
+          <AppIcon name={Icons.swap} size={IconSize.lg} color={Colors.primary} />
         </TouchableOpacity>
 
         <CityPicker
@@ -92,7 +93,7 @@ export function SearchForm({
         mode="date"
         minimumDate={new Date()}
         error={errors?.date ? 'Select a travel date' : undefined}
-        icon="📅"
+        icon={Icons.calendar}
       />
 
       <View style={styles.seatsRow}>
@@ -143,10 +144,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     zIndex: 10,
-  },
-  swapIcon: {
-    fontSize: 18,
-    color: Colors.primary,
   },
   seatsRow: {
     backgroundColor: Colors.surface,
@@ -205,5 +202,4 @@ const styles = StyleSheet.create({
     borderRadius: 2,
     backgroundColor: Colors.gray300,
   },
-  compactEdit: { fontSize: 14, marginLeft: Spacing.xs },
 });

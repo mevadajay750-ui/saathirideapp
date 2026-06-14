@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView } from 'react-native';
-import { Colors, FontFamily, FontSize, Spacing, BorderRadius } from '@/theme';
+import { Colors, FontFamily, FontSize, Spacing, BorderRadius, IconSize, Icons } from '@/theme';
+import { AppIcon } from '@/components/common/AppIcon';
 import { MIN_PRICE_INR, MAX_PRICE_INR } from '@/config/constants';
 
 const PRICE_SUGGESTIONS = [100, 150, 200, 250, 300, 400, 500];
@@ -63,8 +64,9 @@ export function PriceInput({ value, onChange, error }: PriceInputProps) {
       </ScrollView>
 
       <View style={styles.guideline}>
+        <AppIcon name={Icons.bulb} size={IconSize.md} color={Colors.accentDark} />
         <Text style={styles.guidelineText}>
-          💡 Suggested range: ₹{MIN_PRICE_INR}–₹{MAX_PRICE_INR} per seat. Price is shown to
+          Suggested range: ₹{MIN_PRICE_INR}–₹{MAX_PRICE_INR} per seat. Price is shown to
           passengers upfront — they pay cash directly to you.
         </Text>
       </View>
@@ -165,6 +167,9 @@ const styles = StyleSheet.create({
     fontFamily: FontFamily.bodySemiBold,
   },
   guideline: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: Spacing.sm,
     marginTop: Spacing.md,
     padding: Spacing.base,
     backgroundColor: Colors.accentLight,

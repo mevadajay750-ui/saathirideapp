@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { Colors, FontFamily, FontSize, Spacing, BorderRadius } from '@/theme';
+import { Colors, FontFamily, FontSize, Spacing, BorderRadius, IconSize, Icons } from '@/theme';
+import { AppIcon } from '@/components/common/AppIcon';
 import { MAX_SEATS } from '@/config/constants';
 
 interface SeatsStepperProps {
@@ -28,7 +29,11 @@ export function SeatsStepper({ value, onChange, min = 1, max = MAX_SEATS }: Seat
           disabled={!canDecrement}
           hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
         >
-          <Text style={[styles.stepIcon, !canDecrement && styles.stepIconDisabled]}>−</Text>
+          <AppIcon
+            name={Icons.remove}
+            size={IconSize.lg}
+            color={canDecrement ? Colors.primary : Colors.textDisabled}
+          />
         </TouchableOpacity>
 
         <View style={styles.valueWrap}>
@@ -42,7 +47,11 @@ export function SeatsStepper({ value, onChange, min = 1, max = MAX_SEATS }: Seat
           disabled={!canIncrement}
           hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
         >
-          <Text style={[styles.stepIcon, !canIncrement && styles.stepIconDisabled]}>+</Text>
+          <AppIcon
+            name={Icons.add}
+            size={IconSize.lg}
+            color={canIncrement ? Colors.primary : Colors.textDisabled}
+          />
         </TouchableOpacity>
       </View>
     </View>
@@ -91,16 +100,6 @@ const styles = StyleSheet.create({
   stepBtnDisabled: {
     backgroundColor: Colors.gray100,
     borderColor: Colors.gray200,
-  },
-  stepIcon: {
-    fontFamily: FontFamily.bodyBold,
-    fontSize: FontSize.lg,
-    color: Colors.primary,
-    lineHeight: FontSize.lg * 1.2,
-    textAlign: 'center',
-  },
-  stepIconDisabled: {
-    color: Colors.textDisabled,
   },
   valueWrap: {
     alignItems: 'center',

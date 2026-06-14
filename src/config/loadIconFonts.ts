@@ -6,7 +6,9 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
  * RNVectorIcons pod bundle, so UIAppFonts alone is not enough — register them at runtime.
  */
 export async function loadIconFonts(): Promise<void> {
-  if (Platform.OS === 'ios') {
-    await Ionicons.loadFont();
+  if (Platform.OS !== 'ios') {
+    return;
   }
+
+  await Promise.all([Ionicons.loadFont()]);
 }

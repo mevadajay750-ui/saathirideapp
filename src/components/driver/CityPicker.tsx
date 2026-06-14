@@ -7,12 +7,11 @@ import {
   TouchableOpacity,
   FlatList,
   Modal,
-  SafeAreaView,
-  StatusBar,
   Keyboard,
 } from 'react-native';
 import { City, searchCities } from '@/data/cities';
-import { Colors, FontFamily, FontSize, Spacing, BorderRadius } from '@/theme';
+import { Colors, FontFamily, FontSize, Spacing, BorderRadius, IconSize, Icons } from '@/theme';
+import { AppIcon, ScreenWrapper } from '@/components/common';
 
 interface CityPickerProps {
   label: string;
@@ -84,8 +83,7 @@ export function CityPicker({
         presentationStyle="pageSheet"
         onRequestClose={close}
       >
-        <SafeAreaView style={styles.modal}>
-          <StatusBar barStyle="dark-content" />
+        <ScreenWrapper contentStyle={styles.modal}>
 
           <View style={styles.modalHeader}>
             <TouchableOpacity onPress={close} hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
@@ -96,7 +94,7 @@ export function CityPicker({
           </View>
 
           <View style={styles.searchWrap}>
-            <Text style={styles.searchIcon}>🔍</Text>
+            <AppIcon name={Icons.search} size={IconSize.md} color={Colors.textMuted} />
             <TextInput
               ref={inputRef}
               style={styles.searchInput}
@@ -117,7 +115,7 @@ export function CityPicker({
             contentContainerStyle={styles.listContent}
             ListEmptyComponent={
               <View style={styles.emptyState}>
-                <Text style={styles.emptyEmoji}>🗺️</Text>
+                <AppIcon name={Icons.map} size={IconSize['2xl']} color={Colors.gray400} />
                 <Text style={styles.emptyText}>
                   {query.length > 0
                     ? `No cities found for "${query}"`
@@ -136,7 +134,7 @@ export function CityPicker({
                 activeOpacity={0.7}
               >
                 <View style={styles.cityRowLeft}>
-                  <Text style={styles.cityIcon}>📍</Text>
+                  <AppIcon name={Icons.location} size={IconSize.lg} color={Colors.primary} />
                   <View>
                     <Text
                       style={[styles.cityName, value?.id === item.id && styles.cityNameSelected]}
@@ -146,11 +144,13 @@ export function CityPicker({
                     <Text style={styles.cityState}>{item.state}</Text>
                   </View>
                 </View>
-                {value?.id === item.id && <Text style={styles.checkmark}>✓</Text>}
+                {value?.id === item.id && (
+                  <AppIcon name={Icons.check} size={IconSize.lg} color={Colors.primary} />
+                )}
               </TouchableOpacity>
             )}
           />
-        </SafeAreaView>
+        </ScreenWrapper>
       </Modal>
     </>
   );
@@ -241,6 +241,7 @@ const styles = StyleSheet.create({
   searchWrap: {
     flexDirection: 'row',
     alignItems: 'center',
+    gap: Spacing.sm,
     backgroundColor: Colors.surface,
     marginHorizontal: Spacing.base,
     marginVertical: Spacing.md,
@@ -249,10 +250,6 @@ const styles = StyleSheet.create({
     borderColor: Colors.border,
     paddingHorizontal: Spacing.base,
     minHeight: 48,
-  },
-  searchIcon: {
-    fontSize: 16,
-    marginRight: Spacing.sm,
   },
   searchInput: {
     flex: 1,
@@ -289,9 +286,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: Spacing.md,
   },
-  cityIcon: {
-    fontSize: 18,
-  },
   cityName: {
     fontFamily: FontFamily.bodyMedium,
     fontSize: FontSize.base,
@@ -307,18 +301,10 @@ const styles = StyleSheet.create({
     color: Colors.textMuted,
     marginTop: 2,
   },
-  checkmark: {
-    fontFamily: FontFamily.bodyBold,
-    fontSize: FontSize.base,
-    color: Colors.primary,
-  },
   emptyState: {
     alignItems: 'center',
     paddingTop: Spacing['4xl'],
     gap: Spacing.md,
-  },
-  emptyEmoji: {
-    fontSize: 40,
   },
   emptyText: {
     fontFamily: FontFamily.body,

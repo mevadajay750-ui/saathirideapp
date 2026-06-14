@@ -9,7 +9,8 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
-import { Colors, FontFamily } from '@/theme';
+import { Colors, FontFamily, IconSize, Icons } from '@/theme';
+import { AppIcon } from '@/components/common/AppIcon';
 
 interface Props {
   name: string;
@@ -99,7 +100,7 @@ export function AvatarPicker({
               },
             ]}
           >
-            <Text style={{ fontSize: badgeSize * 0.5 }}>✏️</Text>
+            <AppIcon name={Icons.edit} size={Math.round(badgeSize * 0.45)} color={Colors.white} />
           </View>
         )}
       </View>

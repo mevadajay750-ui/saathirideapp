@@ -3,14 +3,13 @@ import {
   View,
   Text,
   StyleSheet,
-  SafeAreaView,
-  StatusBar,
   FlatList,
   TouchableOpacity,
   RefreshControl,
   ActivityIndicator,
 } from 'react-native';
 import { Colors, FontFamily, FontSize, Spacing } from '@/theme';
+import { ScreenWrapper } from '@/components/common';
 import { RideResultCard } from '@/components/passenger/RideResultCard';
 import { SearchFilters } from '@/components/passenger/SearchFilters';
 import { EmptyResults } from '@/components/passenger/EmptyResults';
@@ -96,8 +95,7 @@ export default function SearchResultsScreen({ route, navigation }: Props) {
   };
 
   return (
-    <SafeAreaView style={styles.safe}>
-      <StatusBar barStyle="light-content" backgroundColor={Colors.primary} />
+    <ScreenWrapper statusBar="brand" contentStyle={styles.safe}>
 
       <View style={styles.header}>
         <TouchableOpacity
@@ -118,7 +116,7 @@ export default function SearchResultsScreen({ route, navigation }: Props) {
       </View>
 
       <View style={styles.content}>{renderContent()}</View>
-    </SafeAreaView>
+    </ScreenWrapper>
   );
 }
 

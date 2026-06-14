@@ -3,14 +3,13 @@ import {
   View,
   Text,
   StyleSheet,
-  SafeAreaView,
-  StatusBar,
   FlatList,
   TouchableOpacity,
   RefreshControl,
   ActivityIndicator,
 } from 'react-native';
-import { Colors, FontFamily, FontSize, Spacing, BorderRadius } from '@/theme';
+import { Colors, FontFamily, FontSize, Spacing, BorderRadius, IconSize, Icons } from '@/theme';
+import { AppIcon, ScreenWrapper } from '@/components/common';
 import { RideCard } from '@/components/driver/RideCard';
 import { useMyRides, useRideBookings } from '@/hooks/useDriverRides';
 import { Ride } from '@/types';
@@ -47,7 +46,11 @@ export default function DriverRidesScreen({ navigation }: Props) {
 
   const renderEmpty = () => (
     <View style={styles.empty}>
-      <Text style={styles.emptyEmoji}>{activeTab === 'upcoming' ? '🚗' : '📋'}</Text>
+      <AppIcon
+        name={activeTab === 'upcoming' ? Icons.carSport : Icons.list}
+        size={IconSize['2xl']}
+        color={Colors.gray400}
+      />
       <Text style={styles.emptyTitle}>
         {activeTab === 'upcoming' ? 'No upcoming rides' : 'No past rides'}
       </Text>
@@ -65,8 +68,7 @@ export default function DriverRidesScreen({ navigation }: Props) {
   );
 
   return (
-    <SafeAreaView style={styles.safe}>
-      <StatusBar barStyle="light-content" backgroundColor={Colors.primary} />
+    <ScreenWrapper statusBar="brand" contentStyle={styles.safe}>
 
       <View style={styles.header}>
         <Text style={styles.headerTitle}>My rides</Text>
@@ -95,7 +97,7 @@ export default function DriverRidesScreen({ navigation }: Props) {
         </View>
       ) : error ? (
         <View style={styles.errorState}>
-          <Text style={styles.errorEmoji}>⚠️</Text>
+          <AppIcon name={Icons.warning} size={IconSize['2xl']} color={Colors.textMuted} />
           <Text style={styles.errorText}>Could not load rides</Text>
           <TouchableOpacity onPress={() => refetch()} style={styles.retryBtn}>
             <Text style={styles.retryText}>Try again</Text>
@@ -120,7 +122,7 @@ export default function DriverRidesScreen({ navigation }: Props) {
           )}
         />
       )}
-    </SafeAreaView>
+    </ScreenWrapper>
   );
 }
 
@@ -184,7 +186,6 @@ const styles = StyleSheet.create({
     gap: Spacing.md,
     paddingHorizontal: Spacing['2xl'],
   },
-  emptyEmoji: { fontSize: 56 },
   emptyTitle: {
     fontFamily: FontFamily.headingSemiBold,
     fontSize: FontSize.lg,
@@ -216,7 +217,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: Spacing.md,
   },
-  errorEmoji: { fontSize: 48 },
   errorText: {
     fontFamily: FontFamily.bodyMedium,
     fontSize: FontSize.base,

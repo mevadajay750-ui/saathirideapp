@@ -1,45 +1,72 @@
 import { apiClient } from '@/api/client';
 import { Endpoints } from '@/api/endpoints';
+import { BackendBooking, mapBooking, mapBookings } from '@/api/mappers';
 import { Booking } from '@/types';
 
 export type BookingAction = 'confirmed' | 'cancelled_by_driver' | 'cancelled_by_passenger';
 
-/**
- * Get all bookings for a specific ride (driver view).
- * Returns all passengers who have requested, been accepted, or declined.
- */
-export async function getRideBookings(rideId: string): Promise<Booking[]> {
-  const response = await apiClient.get(Endpoints.RIDE_BOOKINGS(rideId));
-  return response.data.bookings;
+export async function createBooking(rideId: string, seats: number): Promise<Booking> {
+  const response = await apiClient.post<BackendBooking>(Endpoints.BOOKINGS_CREATE, {
+    ride_id: rideId,
+    seats,
+  });
+  return mapBooking(response.data, 'passenger');
 }
 
-/**
- * Driver accepts or declines a booking request.
- * action: 'confirmed' | 'cancelled_by_driver'
- */
+export async function getRideBookings(rideId: string): Promise<Booking[]> {
+  const response = await apiClient.get<BackendBooking[]>(Endpoints.RIDE_BOOKINGS(rideId));
+  return mapBookings(response.data, 'driver');
+}
+
+export async function acceptBooking(bookingId: string): Promise<Booking> {
+  const response = await apiClient.patch<BackendBooking>(Endpoints.BOOKING_ACCEPT(bookingId));
+  return mapBooking(response.data, 'driver');
+}
+
+export async function declineBooking(bookingId: string): Promise<void> {
+  await apiClient.patch(Endpoints.BOOKING_DECLINE(bookingId));
+}
+
 export async function updateBookingStatus(
   bookingId: string,
   action: BookingAction,
 ): Promise<Booking> {
-  const response = await apiClient.put(Endpoints.BOOKING_UPDATE(bookingId), {
-    status: action,
-  });
-  return response.data.booking;
+  if (action === 'confirmed') {
+    return acceptBooking(bookingId);
+  }
+  if (action === 'cancelled_by_driver') {
+    await declineBooking(bookingId);
+    return {
+      id: bookingId,
+      rideId: '',
+      passengerId: '',
+      passengerName: '',
+      passengerRating: 0,
+      seatsRequested: 0,
+      status: 'cancelled_by_driver',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+  }
+  await apiClient.patch(Endpoints.BOOKING_CANCEL(bookingId));
+  return {
+    id: bookingId,
+    rideId: '',
+    passengerId: '',
+    passengerName: '',
+    passengerRating: 0,
+    seatsRequested: 0,
+    status: 'cancelled_by_passenger',
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  };
 }
 
-/**
- * Get all bookings for the current user (passenger view — used later).
- */
 export async function getMyBookings(): Promise<Booking[]> {
-  const response = await apiClient.get(Endpoints.BOOKINGS_MY);
-  return response.data.bookings;
+  const response = await apiClient.get<BackendBooking[]>(Endpoints.BOOKINGS_MY);
+  return mapBookings(response.data, 'passenger');
 }
 
-/**
- * Driver cancels an entire ride (cascades cancel to all confirmed bookings).
- */
 export async function cancelRideWithBookings(rideId: string): Promise<void> {
-  await apiClient.put(Endpoints.RIDE_UPDATE(rideId), {
-    status: 'cancelled',
-  });
+  await apiClient.delete(Endpoints.RIDE_DETAIL(rideId));
 }

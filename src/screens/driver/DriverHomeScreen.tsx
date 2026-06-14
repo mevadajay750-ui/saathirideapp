@@ -1,16 +1,17 @@
 import React from 'react';
-import { View, Text, StyleSheet, SafeAreaView, StatusBar, ScrollView } from 'react-native';
-import { Colors, FontFamily, FontSize, Spacing, BorderRadius } from '@/theme';
-import { Button } from '@/components/common';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { Colors, FontFamily, FontSize, Spacing, BorderRadius, IconSize, Icons } from '@/theme';
+import type { AppIconName } from '@/theme';
+import { AppIcon, Button, ScreenWrapper } from '@/components/common';
 import { useAuthStore } from '@/store/auth.store';
 import type { DriverTabScreenProps } from '@/navigation/types';
 
 type Props = DriverTabScreenProps<'DriverHome'>;
 
-const TIPS = [
-  { emoji: '💰', text: 'Drivers earn back fuel + toll costs on every shared ride' },
-  { emoji: '⭐', text: 'Drivers with 4.5+ rating get 3× more booking requests' },
-  { emoji: '🛡️', text: 'Passengers are verified — name and photo shown before you accept' },
+const TIPS: { icon: AppIconName; text: string }[] = [
+  { icon: Icons.wallet, text: 'Drivers earn back fuel + toll costs on every shared ride' },
+  { icon: Icons.star, text: 'Drivers with 4.5+ rating get 3× more booking requests' },
+  { icon: Icons.shield, text: 'Passengers are verified — name and photo shown before you accept' },
 ];
 
 export default function DriverHomeScreen({ navigation }: Props) {
@@ -18,8 +19,7 @@ export default function DriverHomeScreen({ navigation }: Props) {
   const firstName = user?.name?.split(' ')[0] ?? 'there';
 
   return (
-    <SafeAreaView style={styles.safe}>
-      <StatusBar barStyle="light-content" backgroundColor={Colors.primary} />
+    <ScreenWrapper statusBar="brand" contentStyle={styles.safe}>
 
       <View style={styles.header}>
         <View>
@@ -36,7 +36,7 @@ export default function DriverHomeScreen({ navigation }: Props) {
 
       <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
         <View style={styles.ctaCard}>
-          <Text style={styles.ctaEmoji}>🚗</Text>
+          <AppIcon name={Icons.carSport} size={IconSize['2xl']} color={Colors.primary} />
           <Text style={styles.ctaTitle}>Post your next ride</Text>
           <Text style={styles.ctaBody}>
             Going intercity? Add your trip and let passengers join you. Takes less than 2 minutes.
@@ -65,12 +65,12 @@ export default function DriverHomeScreen({ navigation }: Props) {
         <Text style={styles.tipsTitle}>Tips for drivers</Text>
         {TIPS.map((tip, i) => (
           <View key={i} style={styles.tipRow}>
-            <Text style={styles.tipEmoji}>{tip.emoji}</Text>
+            <AppIcon name={tip.icon} size={IconSize.lg} color={Colors.primary} />
             <Text style={styles.tipText}>{tip.text}</Text>
           </View>
         ))}
       </ScrollView>
-    </SafeAreaView>
+    </ScreenWrapper>
   );
 }
 
@@ -125,7 +125,6 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.base,
     gap: Spacing.md,
   },
-  ctaEmoji: { fontSize: 48 },
   ctaTitle: {
     fontFamily: FontFamily.heading,
     fontSize: FontSize.xl,
@@ -185,7 +184,6 @@ const styles = StyleSheet.create({
     borderColor: Colors.border,
     padding: Spacing.base,
   },
-  tipEmoji: { fontSize: 22 },
   tipText: {
     flex: 1,
     fontFamily: FontFamily.body,

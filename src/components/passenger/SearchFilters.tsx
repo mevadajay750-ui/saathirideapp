@@ -1,19 +1,21 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
-import { Colors, FontFamily, FontSize, Spacing, BorderRadius } from '@/theme';
+import { Colors, FontFamily, FontSize, Spacing, BorderRadius, IconSize, Icons } from '@/theme';
+import type { AppIconName } from '@/theme';
+import { AppIcon } from '@/components/common/AppIcon';
 import { SortOption } from '@/hooks/useRideSearch';
 
 interface FilterOption {
   key: SortOption;
   label: string;
-  emoji: string;
+  icon: AppIconName;
 }
 
 const FILTER_OPTIONS: FilterOption[] = [
-  { key: 'departure', label: 'Earliest first', emoji: '🕐' },
-  { key: 'price_asc', label: 'Lowest price', emoji: '💸' },
-  { key: 'price_desc', label: 'Highest price', emoji: '💎' },
-  { key: 'rating', label: 'Top rated', emoji: '⭐' },
+  { key: 'departure', label: 'Earliest first', icon: Icons.time },
+  { key: 'price_asc', label: 'Lowest price', icon: Icons.cash },
+  { key: 'price_desc', label: 'Highest price', icon: Icons.diamond },
+  { key: 'rating', label: 'Top rated', icon: Icons.star },
 ];
 
 interface Props {
@@ -29,7 +31,10 @@ export function SearchFilters({ selected, onSelect, resultCount }: Props) {
         <Text style={styles.countText}>
           {resultCount} ride{resultCount !== 1 ? 's' : ''} found
         </Text>
-        <Text style={styles.cashNote}>💵 Pay cash to driver</Text>
+        <View style={styles.cashNoteRow}>
+          <AppIcon name={Icons.cash} size={IconSize.sm} color={Colors.textMuted} />
+          <Text style={styles.cashNote}>Pay cash to driver</Text>
+        </View>
       </View>
 
       <ScrollView
@@ -46,7 +51,11 @@ export function SearchFilters({ selected, onSelect, resultCount }: Props) {
               onPress={() => onSelect(opt.key)}
               activeOpacity={0.8}
             >
-              <Text style={styles.chipEmoji}>{opt.emoji}</Text>
+              <AppIcon
+                name={opt.icon}
+                size={IconSize.sm}
+                color={isActive ? Colors.primaryDeep : Colors.textSecondary}
+              />
               <Text style={[styles.chipLabel, isActive && styles.chipLabelActive]}>
                 {opt.label}
               </Text>
@@ -78,6 +87,11 @@ const styles = StyleSheet.create({
     fontSize: FontSize.sm,
     color: Colors.textSecondary,
   },
+  cashNoteRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+  },
   cashNote: {
     fontFamily: FontFamily.body,
     fontSize: FontSize.xs,
@@ -102,7 +116,6 @@ const styles = StyleSheet.create({
     borderColor: Colors.primary,
     backgroundColor: Colors.primaryLight,
   },
-  chipEmoji: { fontSize: 13 },
   chipLabel: {
     fontFamily: FontFamily.bodyMedium,
     fontSize: FontSize.sm,

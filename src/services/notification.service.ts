@@ -54,21 +54,6 @@ export async function createAndroidChannels(): Promise<void> {
   if (Platform.OS !== 'android') return;
 }
 
-export async function reportPermissionStatus(): Promise<void> {
-  try {
-    const authStatus = await messaging().hasPermission();
-    const granted =
-      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
-      authStatus === messaging.AuthorizationStatus.PROVISIONAL;
-
-    await apiClient.patch(Endpoints.DEVICE_TOKEN, {
-      push_enabled: granted,
-    });
-  } catch {
-    console.warn('[Notifications] Permission status report failed');
-  }
-}
-
 export async function registerDeviceToken(): Promise<void> {
   try {
     const token = await messaging().getToken();
@@ -78,12 +63,10 @@ export async function registerDeviceToken(): Promise<void> {
       console.log('[Notifications] FCM token:', token);
     }
 
-    await apiClient.post(Endpoints.DEVICE_TOKEN, {
-      token,
+    await apiClient.post(Endpoints.DEVICES, {
+      fcm_token: token,
       platform: Platform.OS,
     });
-
-    await reportPermissionStatus();
   } catch (error) {
     console.warn('[Notifications] Token registration failed:', error);
   }
@@ -92,11 +75,10 @@ export async function registerDeviceToken(): Promise<void> {
 export function subscribeToTokenRefresh(): () => void {
   return messaging().onTokenRefresh(async (newToken) => {
     try {
-      await apiClient.post(Endpoints.DEVICE_TOKEN, {
-        token: newToken,
+      await apiClient.post(Endpoints.DEVICES, {
+        fcm_token: newToken,
         platform: Platform.OS,
       });
-      await reportPermissionStatus();
     } catch {
       console.warn('[Notifications] Token refresh registration failed');
     }

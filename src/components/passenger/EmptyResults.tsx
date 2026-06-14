@@ -1,6 +1,8 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { Colors, FontFamily, FontSize, Spacing, BorderRadius } from '@/theme';
+import { Colors, FontFamily, FontSize, Spacing, BorderRadius, IconSize } from '@/theme';
+import { Icons, type AppIconName } from '@/theme/icons';
+import { AppIcon } from '@/components/common/AppIcon';
 
 type Variant = 'no_results' | 'no_search' | 'error';
 
@@ -13,10 +15,10 @@ interface Props {
   onModifySearch?: () => void;
 }
 
-const CONTENT: Record<Variant, { emoji: string; title: string }> = {
-  no_search: { emoji: '🔍', title: 'Search for a ride' },
-  no_results: { emoji: '🛣️', title: 'No rides found' },
-  error: { emoji: '⚠️', title: 'Something went wrong' },
+const CONTENT: Record<Variant, { icon: AppIconName; title: string }> = {
+  no_search: { icon: Icons.search, title: 'Search for a ride' },
+  no_results: { icon: Icons.road, title: 'No rides found' },
+  error: { icon: Icons.warning, title: 'Something went wrong' },
 };
 
 export function EmptyResults({
@@ -48,7 +50,7 @@ export function EmptyResults({
 
   return (
     <View style={styles.container}>
-      <Text style={styles.emoji}>{content.emoji}</Text>
+      <AppIcon name={content.icon} size={IconSize['2xl']} color={Colors.gray400} />
       <Text style={styles.title}>{content.title}</Text>
       <Text style={styles.body}>{body()}</Text>
 
@@ -76,7 +78,6 @@ const styles = StyleSheet.create({
     paddingTop: Spacing['4xl'],
     gap: Spacing.md,
   },
-  emoji: { fontSize: 56 },
   title: {
     fontFamily: FontFamily.headingSemiBold,
     fontSize: FontSize.lg,

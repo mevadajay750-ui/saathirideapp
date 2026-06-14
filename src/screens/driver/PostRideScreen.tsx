@@ -1,12 +1,5 @@
 import React, { useRef, useCallback, useState, useEffect } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  KeyboardAvoidingView,
-  Platform,
-} from 'react-native';
+import { View, Text, StyleSheet, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -107,7 +100,6 @@ export default function PostRideScreen({ navigation }: Props) {
 
   return (
     <ScreenWrapper statusBar="brand" contentStyle={styles.safe}>
-
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Post a ride</Text>
         <Text style={styles.headerSubtitle}>Share your journey — earn while you drive</Text>

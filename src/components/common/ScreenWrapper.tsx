@@ -17,21 +17,12 @@ const STATUS_BAR_COLORS: Record<StatusBarVariant, string> = {
   brand: Colors.primary,
 };
 
-export function ScreenWrapper({
-  children,
-  statusBar = 'light',
-  style,
-  contentStyle,
-}: Props) {
+export function ScreenWrapper({ children, statusBar = 'light', style, contentStyle }: Props) {
   const statusBarColor = STATUS_BAR_COLORS[statusBar];
 
   return (
     <View style={[styles.root, { backgroundColor: statusBarColor }, style]}>
-      <StatusBar
-        barStyle="dark-content"
-        backgroundColor={statusBarColor}
-        translucent={false}
-      />
+      <StatusBar barStyle="dark-content" backgroundColor={statusBarColor} translucent={false} />
       <SafeAreaView style={[styles.safe, contentStyle]} edges={['top', 'left', 'right']}>
         {children}
       </SafeAreaView>

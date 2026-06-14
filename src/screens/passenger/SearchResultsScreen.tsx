@@ -96,7 +96,6 @@ export default function SearchResultsScreen({ route, navigation }: Props) {
 
   return (
     <ScreenWrapper statusBar="brand" contentStyle={styles.safe}>
-
       <View style={styles.header}>
         <TouchableOpacity
           onPress={() => navigation.goBack()}

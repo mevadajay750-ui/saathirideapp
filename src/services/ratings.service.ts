@@ -1,11 +1,6 @@
 import { apiClient } from '@/api/client';
 import { Endpoints } from '@/api/endpoints';
-import {
-  BackendPendingRating,
-  BackendRating,
-  mapPendingRating,
-  mapRating,
-} from '@/api/mappers';
+import { BackendPendingRating, BackendRating, mapPendingRating, mapRating } from '@/api/mappers';
 import { Rating } from '@/types';
 
 export interface SubmitRatingPayload {

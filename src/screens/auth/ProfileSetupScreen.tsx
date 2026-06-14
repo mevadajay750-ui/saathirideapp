@@ -14,7 +14,16 @@ import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { launchImageLibrary, launchCamera } from 'react-native-image-picker';
-import { Colors, FontFamily, FontSize, Spacing, BorderRadius, IconSize, Icons, TextStyles } from '@/theme';
+import {
+  Colors,
+  FontFamily,
+  FontSize,
+  Spacing,
+  BorderRadius,
+  IconSize,
+  Icons,
+  TextStyles,
+} from '@/theme';
 import { AppIcon, Button, Input, ScreenWrapper } from '@/components/common';
 import { useUpdateProfile, useUploadAndSavePhoto } from '@/hooks/useProfile';
 import { setupProfile } from '@/services/auth.service';
@@ -135,7 +144,6 @@ export default function ProfileSetupScreen({ navigation }: Props) {
 
   return (
     <ScreenWrapper contentStyle={styles.safe}>
-
       <KeyboardAvoidingView
         style={{ flex: 1 }}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}

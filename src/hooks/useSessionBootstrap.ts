@@ -11,7 +11,10 @@ export function useSessionBootstrap() {
 
   useEffect(() => {
     if (BYPASS_AUTH) {
-      setAuth(DEV_MOCK_USER, DEV_MOCK_TOKEN, { refreshToken: DEV_MOCK_TOKEN, needsProfileSetup: false });
+      setAuth(DEV_MOCK_USER, DEV_MOCK_TOKEN, {
+        refreshToken: DEV_MOCK_TOKEN,
+        needsProfileSetup: false,
+      });
       return;
     }
 

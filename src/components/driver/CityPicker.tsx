@@ -84,7 +84,6 @@ export function CityPicker({
         onRequestClose={close}
       >
         <ScreenWrapper contentStyle={styles.modal}>
-
           <View style={styles.modalHeader}>
             <TouchableOpacity onPress={close} hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
               <Text style={styles.cancelBtn}>Cancel</Text>

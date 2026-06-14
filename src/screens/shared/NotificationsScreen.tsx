@@ -1,11 +1,5 @@
 import React, { useCallback } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  FlatList,
-  TouchableOpacity,
-} from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import { Colors, FontFamily, FontSize, Spacing, IconSize, Icons } from '@/theme';
 import { AppIcon, ScreenWrapper } from '@/components/common';
 import { NotificationItem } from '@/components/notifications/NotificationItem';
@@ -32,7 +26,6 @@ export default function NotificationsScreen({ navigation }: Props) {
 
   return (
     <ScreenWrapper statusBar="brand" contentStyle={styles.safe}>
-
       <View style={styles.header}>
         <TouchableOpacity
           onPress={() => navigation.goBack()}

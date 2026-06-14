@@ -119,7 +119,6 @@ export default function ProfileScreen(_props: Props) {
 
   return (
     <ScreenWrapper statusBar="brand" contentStyle={styles.safe}>
-
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Profile</Text>
         <View style={styles.headerRight}>

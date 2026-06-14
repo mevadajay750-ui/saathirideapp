@@ -49,7 +49,6 @@ export default function MyBookingsScreen() {
 
   return (
     <ScreenWrapper statusBar="brand" contentStyle={styles.safe}>
-
       <View style={styles.header}>
         <Text style={styles.headerTitle}>My bookings</Text>
       </View>

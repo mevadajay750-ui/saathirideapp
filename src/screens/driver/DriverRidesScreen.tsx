@@ -69,7 +69,6 @@ export default function DriverRidesScreen({ navigation }: Props) {
 
   return (
     <ScreenWrapper statusBar="brand" contentStyle={styles.safe}>
-
       <View style={styles.header}>
         <Text style={styles.headerTitle}>My rides</Text>
       </View>

@@ -72,7 +72,6 @@ export default function OTPScreen({ navigation, route }: Props) {
 
   return (
     <ScreenWrapper contentStyle={styles.safe}>
-
       <KeyboardAvoidingView
         style={{ flex: 1 }}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}

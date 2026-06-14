@@ -20,7 +20,6 @@ export default function DriverHomeScreen({ navigation }: Props) {
 
   return (
     <ScreenWrapper statusBar="brand" contentStyle={styles.safe}>
-
       <View style={styles.header}>
         <View>
           <Text style={styles.greeting}>Good morning, {firstName} 👋</Text>

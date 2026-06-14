@@ -66,8 +66,8 @@ export function PriceInput({ value, onChange, error }: PriceInputProps) {
       <View style={styles.guideline}>
         <AppIcon name={Icons.bulb} size={IconSize.md} color={Colors.accentDark} />
         <Text style={styles.guidelineText}>
-          Suggested range: ₹{MIN_PRICE_INR}–₹{MAX_PRICE_INR} per seat. Price is shown to
-          passengers upfront — they pay cash directly to you.
+          Suggested range: ₹{MIN_PRICE_INR}–₹{MAX_PRICE_INR} per seat. Price is shown to passengers
+          upfront — they pay cash directly to you.
         </Text>
       </View>
     </View>

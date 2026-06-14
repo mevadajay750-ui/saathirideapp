@@ -111,7 +111,6 @@ export default function RideBookingScreen({ route, navigation }: Props) {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <BottomSheetModalProvider>
         <ScreenWrapper statusBar="brand" contentStyle={styles.safe}>
-
           <View style={styles.header}>
             <TouchableOpacity
               onPress={() => navigation.goBack()}
@@ -154,7 +153,10 @@ export default function RideBookingScreen({ route, navigation }: Props) {
                 [
                   { icon: Icons.mail, text: `Your request is sent to ${ride.driverName}` },
                   { icon: Icons.bell, text: "You'll get notified when they accept or decline" },
-                  { icon: Icons.phone, text: "Once confirmed, you'll see the driver's phone number" },
+                  {
+                    icon: Icons.phone,
+                    text: "Once confirmed, you'll see the driver's phone number",
+                  },
                   {
                     icon: Icons.cash,
                     text: `Pay ${formatPrice(totalPrice)} cash to the driver at the pickup point`,

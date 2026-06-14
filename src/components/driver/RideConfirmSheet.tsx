@@ -2,7 +2,16 @@ import React, { forwardRef } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { BottomSheet, BottomSheetRef } from '@/components/common/BottomSheet';
 import { Button } from '@/components/common';
-import { Colors, FontFamily, FontSize, Spacing, BorderRadius, TextStyles, IconSize, Icons } from '@/theme';
+import {
+  Colors,
+  FontFamily,
+  FontSize,
+  Spacing,
+  BorderRadius,
+  TextStyles,
+  IconSize,
+  Icons,
+} from '@/theme';
 import { AppIcon } from '@/components/common/AppIcon';
 import { Ride } from '@/types';
 import { formatDepartureDate, formatPrice } from '@/utils/formatters';

@@ -1,12 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  KeyboardAvoidingView,
-  Platform,
-} from 'react-native';
+import { View, Text, StyleSheet, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
 import { format } from 'date-fns';
 import { Colors, FontFamily, FontSize, Spacing, BorderRadius, IconSize, Icons } from '@/theme';
 import type { AppIconName } from '@/theme';
@@ -57,7 +50,6 @@ export default function PassengerHomeScreen({ navigation }: Props) {
 
   return (
     <ScreenWrapper statusBar="brand" contentStyle={styles.safe}>
-
       <View style={styles.header}>
         <View>
           <Text style={styles.greeting}>Hey {firstName}! 👋</Text>
@@ -105,7 +97,11 @@ export default function PassengerHomeScreen({ navigation }: Props) {
           <Text style={styles.sectionTitle}>How SaathiRide works</Text>
           {(
             [
-              { icon: Icons.search, step: 'Search', desc: 'Find drivers going your way on the same day' },
+              {
+                icon: Icons.search,
+                step: 'Search',
+                desc: 'Find drivers going your way on the same day',
+              },
               {
                 icon: Icons.checkCircle,
                 step: 'Book',

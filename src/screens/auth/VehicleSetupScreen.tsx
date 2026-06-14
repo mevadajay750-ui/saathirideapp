@@ -9,7 +9,16 @@ import {
   Platform,
   Alert,
 } from 'react-native';
-import { Colors, FontFamily, FontSize, Spacing, BorderRadius, TextStyles, IconSize, Icons } from '@/theme';
+import {
+  Colors,
+  FontFamily,
+  FontSize,
+  Spacing,
+  BorderRadius,
+  TextStyles,
+  IconSize,
+  Icons,
+} from '@/theme';
 import { AppIcon, ScreenWrapper } from '@/components/common';
 import { VehicleForm, VehicleFormData } from '@/components/profile/VehicleForm';
 import { useUpsertVehicle } from '@/hooks/useProfile';
@@ -59,7 +68,6 @@ export default function VehicleSetupScreen(_props: Props) {
 
   return (
     <ScreenWrapper contentStyle={styles.safe}>
-
       <KeyboardAvoidingView
         style={{ flex: 1 }}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}

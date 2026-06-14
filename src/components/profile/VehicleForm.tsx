@@ -33,13 +33,7 @@ const schema = z.object({
   totalSeats: z
     .union([z.string(), z.number()])
     .transform((v) => (typeof v === 'string' ? parseInt(v, 10) : v))
-    .pipe(
-      z
-        .number()
-        .int()
-        .min(1, 'At least 1 seat')
-        .max(MAX_SEATS, `Maximum ${MAX_SEATS} seats`),
-    ),
+    .pipe(z.number().int().min(1, 'At least 1 seat').max(MAX_SEATS, `Maximum ${MAX_SEATS} seats`)),
 });
 
 export type VehicleFormData = z.infer<typeof schema>;

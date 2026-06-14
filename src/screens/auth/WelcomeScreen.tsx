@@ -9,7 +9,6 @@ type Props = AuthScreenProps<'Welcome'>;
 export default function WelcomeScreen({ navigation }: Props) {
   return (
     <ScreenWrapper contentStyle={styles.safe}>
-
       <View style={styles.container}>
         {/* Hero area */}
         <View style={[CommonStyles.centerFlex, styles.hero]}>

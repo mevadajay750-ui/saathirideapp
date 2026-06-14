@@ -1,6 +1,15 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { Colors, FontFamily, FontSize, Spacing, BorderRadius, Shadow, IconSize, Icons } from '@/theme';
+import {
+  Colors,
+  FontFamily,
+  FontSize,
+  Spacing,
+  BorderRadius,
+  Shadow,
+  IconSize,
+  Icons,
+} from '@/theme';
 import { AppIcon } from '@/components/common/AppIcon';
 import { Ride } from '@/types';
 import { formatDepartureDate, formatPrice } from '@/utils/formatters';

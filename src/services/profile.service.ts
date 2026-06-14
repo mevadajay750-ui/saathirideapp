@@ -1,6 +1,12 @@
 import { apiClient } from '@/api/client';
 import { Endpoints } from '@/api/endpoints';
-import { BackendUser, BackendVehicle, mapUser, mapVehicle, toApiVehiclePayload } from '@/api/mappers';
+import {
+  BackendUser,
+  BackendVehicle,
+  mapUser,
+  mapVehicle,
+  toApiVehiclePayload,
+} from '@/api/mappers';
 import { AuthUser, Vehicle, UserRole } from '@/types';
 
 export interface UpdateProfilePayload {

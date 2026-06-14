@@ -14,12 +14,6 @@ export const styles = StyleSheet.create({
     paddingTop: Spacing['3xl'],
   },
   logoMark: {
-    width: 64,
-    height: 64,
-    borderRadius: BorderRadius['2xl'],
-    backgroundColor: Colors.primary,
-    alignItems: 'center',
-    justifyContent: 'center',
     marginBottom: Spacing.md,
   },
   appName: {

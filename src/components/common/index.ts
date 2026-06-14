@@ -1,6 +1,7 @@
 export { ScreenWrapper } from './ScreenWrapper';
 export type { StatusBarVariant } from './ScreenWrapper';
 export { AppIcon } from './AppIcon';
+export { AppLogo } from './AppLogo';
 export { Button } from './Button';
 export type { ButtonVariant, ButtonSize } from './Button';
 export { Input } from './Input';

@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text } from 'react-native';
-import { Colors, Spacing, BorderRadius, TextStyles, CommonStyles, IconSize } from '@/theme';
-import { AppIcon, Button, ScreenWrapper } from '@/components/common';
+import { TextStyles, CommonStyles } from '@/theme';
+import { AppLogo, Button, ScreenWrapper } from '@/components/common';
 import type { AuthScreenProps } from '@/navigation/types';
 import { styles } from './styles';
 
@@ -15,7 +15,7 @@ export default function WelcomeScreen({ navigation }: Props) {
         <View style={[CommonStyles.centerFlex, styles.hero]}>
           {/* Logo mark */}
           <View style={styles.logoMark}>
-            <AppIcon name="car-sport-outline" size={IconSize.xl} color={Colors.white} />
+            <AppLogo size={64} borderRadius={16} />
           </View>
 
           {/* App name */}

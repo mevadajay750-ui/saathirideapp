@@ -17,12 +17,6 @@ export const styles = StyleSheet.create({
     marginBottom: Spacing['2xl'],
   },
   logoMark: {
-    width: 64,
-    height: 64,
-    borderRadius: BorderRadius.lg,
-    backgroundColor: Colors.primaryLight,
-    alignItems: 'center',
-    justifyContent: 'center',
     marginBottom: Spacing.md,
   },
   title: {

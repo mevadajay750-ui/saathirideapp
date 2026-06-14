@@ -19,7 +19,7 @@ import {
   IconSize,
   Icons,
 } from '@/theme';
-import { AppIcon, ScreenWrapper } from '@/components/common';
+import { AppLogo, AppIcon, ScreenWrapper } from '@/components/common';
 import { VehicleForm, VehicleFormData } from '@/components/profile/VehicleForm';
 import { useUpsertVehicle } from '@/hooks/useProfile';
 import { fetchProfile } from '@/services/profile.service';
@@ -79,7 +79,7 @@ export default function VehicleSetupScreen(_props: Props) {
         >
           <View style={styles.header}>
             <View style={styles.logoMark}>
-              <AppIcon name={Icons.carSport} size={IconSize.xl} color={Colors.primary} />
+              <AppLogo size={64} borderRadius={16} />
             </View>
             <Text style={[TextStyles.h2, styles.title]}>Register your vehicle</Text>
             <Text style={[TextStyles.body, styles.subtitle]}>

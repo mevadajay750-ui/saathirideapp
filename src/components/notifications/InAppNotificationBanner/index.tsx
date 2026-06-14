@@ -2,17 +2,8 @@ import React, { useEffect, useMemo, useRef, useState, useCallback } from 'react'
 import { Animated, View, Text, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { styles } from './styles';
-import {
-  Colors,
-  FontFamily,
-  FontSize,
-  Spacing,
-  BorderRadius,
-  Shadow,
-  IconSize,
-  Icons,
-} from '@/theme';
-import { AppIcon } from '@/components/common/AppIcon';
+import { IconSize, Icons, Colors } from '@/theme';
+import { AppLogo, AppIcon } from '@/components/common';
 import { NotifPayload, setForegroundNotifHandler } from '@/services/notification.service';
 import { navigateFromNotification } from '@/utils/notificationNavigation';
 
@@ -70,7 +61,7 @@ export function InAppNotificationBanner() {
         <TouchableOpacity style={styles.banner} onPress={handleTap} activeOpacity={0.92}>
           <View style={styles.left}>
             <View style={styles.appIcon}>
-              <AppIcon name={Icons.carSport} size={IconSize.lg} color={Colors.primary} />
+              <AppLogo size={36} borderRadius={8} />
             </View>
             <View style={styles.textBlock}>
               <Text style={styles.title} numberOfLines={1}>

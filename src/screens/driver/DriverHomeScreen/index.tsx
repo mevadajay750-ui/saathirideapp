@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, ScrollView } from 'react-native';
 import { Colors, FontFamily, FontSize, Spacing, BorderRadius, IconSize, Icons } from '@/theme';
 import type { AppIconName } from '@/theme';
-import { AppIcon, Button, ScreenWrapper } from '@/components/common';
+import { AppLogo, AppIcon, Button, ScreenWrapper } from '@/components/common';
 import { useAuthStore } from '@/store/auth.store';
 import type { DriverTabScreenProps } from '@/navigation/types';
 import { styles } from './styles';
@@ -36,7 +36,7 @@ export default function DriverHomeScreen({ navigation }: Props) {
 
       <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
         <View style={styles.ctaCard}>
-          <AppIcon name={Icons.carSport} size={IconSize['2xl']} color={Colors.primary} />
+          <AppLogo size={56} borderRadius={14} />
           <Text style={styles.ctaTitle}>Post your next ride</Text>
           <Text style={styles.ctaBody}>
             Going intercity? Add your trip and let passengers join you. Takes less than 2 minutes.

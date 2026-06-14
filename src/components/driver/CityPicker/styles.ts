@@ -1,0 +1,160 @@
+import { StyleSheet } from 'react-native';
+import { Colors, FontFamily, FontSize, Spacing, BorderRadius } from '@/theme';
+
+export const styles = StyleSheet.create({
+  label: {
+    fontFamily: FontFamily.bodyMedium,
+    fontSize: FontSize.sm,
+    color: Colors.textSecondary,
+    marginBottom: Spacing.xs,
+  },
+  trigger: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    borderWidth: 1.5,
+    borderColor: Colors.border,
+    borderRadius: BorderRadius.md,
+    backgroundColor: Colors.surface,
+    paddingHorizontal: Spacing.base,
+    paddingVertical: Spacing.md,
+    minHeight: 52,
+  },
+  triggerError: {
+    borderColor: Colors.error,
+  },
+  triggerContent: {
+    flex: 1,
+  },
+  triggerValue: {
+    fontFamily: FontFamily.bodySemiBold,
+    fontSize: FontSize.base,
+    color: Colors.textPrimary,
+  },
+  triggerState: {
+    fontFamily: FontFamily.body,
+    fontSize: FontSize.xs,
+    color: Colors.textMuted,
+    marginTop: 2,
+  },
+  triggerPlaceholder: {
+    fontFamily: FontFamily.body,
+    fontSize: FontSize.base,
+    color: Colors.textDisabled,
+    flex: 1,
+  },
+  triggerIcon: {
+    fontFamily: FontFamily.body,
+    fontSize: FontSize.sm,
+    color: Colors.textMuted,
+    marginLeft: Spacing.sm,
+  },
+  errorText: {
+    fontFamily: FontFamily.body,
+    fontSize: FontSize.xs,
+    color: Colors.error,
+    marginTop: Spacing.xs,
+  },
+  modal: {
+    flex: 1,
+    backgroundColor: Colors.background,
+  },
+  modalHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: Spacing.base,
+    paddingVertical: Spacing.md,
+    borderBottomWidth: 0.5,
+    borderBottomColor: Colors.divider,
+    backgroundColor: Colors.surface,
+  },
+  cancelBtn: {
+    fontFamily: FontFamily.bodyMedium,
+    fontSize: FontSize.base,
+    color: Colors.primary,
+    width: 56,
+  },
+  modalTitle: {
+    fontFamily: FontFamily.headingSemiBold,
+    fontSize: FontSize.md,
+    color: Colors.textPrimary,
+  },
+  headerSpacer: {
+    width: 56,
+  },
+  searchWrap: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.sm,
+    backgroundColor: Colors.surface,
+    marginHorizontal: Spacing.base,
+    marginVertical: Spacing.md,
+    borderRadius: BorderRadius.md,
+    borderWidth: 1.5,
+    borderColor: Colors.border,
+    paddingHorizontal: Spacing.base,
+    minHeight: 48,
+  },
+  searchInput: {
+    flex: 1,
+    fontFamily: FontFamily.body,
+    fontSize: FontSize.base,
+    color: Colors.textPrimary,
+    paddingVertical: Spacing.sm,
+  },
+  listContent: {
+    paddingHorizontal: Spacing.base,
+    paddingBottom: Spacing['4xl'],
+  },
+  cityRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: Colors.surface,
+    paddingHorizontal: Spacing.base,
+    paddingVertical: Spacing.md,
+    borderRadius: BorderRadius.md,
+    marginBottom: Spacing.xs,
+    borderWidth: 0.5,
+    borderColor: Colors.border,
+  },
+  cityRowLast: {
+    marginBottom: 0,
+  },
+  cityRowSelected: {
+    borderColor: Colors.primary,
+    backgroundColor: Colors.primaryLight,
+  },
+  cityRowLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.md,
+  },
+  cityName: {
+    fontFamily: FontFamily.bodyMedium,
+    fontSize: FontSize.base,
+    color: Colors.textPrimary,
+  },
+  cityNameSelected: {
+    color: Colors.primaryDeep,
+    fontFamily: FontFamily.bodySemiBold,
+  },
+  cityState: {
+    fontFamily: FontFamily.body,
+    fontSize: FontSize.xs,
+    color: Colors.textMuted,
+    marginTop: 2,
+  },
+  emptyState: {
+    alignItems: 'center',
+    paddingTop: Spacing['4xl'],
+    gap: Spacing.md,
+  },
+  emptyText: {
+    fontFamily: FontFamily.body,
+    fontSize: FontSize.base,
+    color: Colors.textMuted,
+    textAlign: 'center',
+  },
+});

@@ -1,0 +1,162 @@
+import { StyleSheet } from 'react-native';
+import { Colors, FontFamily, FontSize, Spacing, BorderRadius } from '@/theme';
+
+export const styles = StyleSheet.create({
+  safe: {
+    flex: 1,
+    backgroundColor: Colors.white,
+  },
+  scroll: {
+    flexGrow: 1,
+    paddingHorizontal: Spacing.xl,
+    paddingBottom: Spacing['4xl'],
+    paddingTop: Spacing.xl,
+  },
+  header: {
+    marginBottom: Spacing['2xl'],
+  },
+  title: {
+    color: Colors.textBrand,
+    marginBottom: Spacing.md,
+  },
+  subtitle: {
+    color: Colors.textMuted,
+    lineHeight: FontSize.base * 1.6,
+  },
+  photoPicker: {
+    alignSelf: 'center',
+    marginBottom: Spacing['2xl'],
+    position: 'relative',
+  },
+  photoPlaceholder: {
+    width: 100,
+    height: 100,
+    borderRadius: BorderRadius.full,
+    backgroundColor: Colors.primaryLight,
+    borderWidth: 2,
+    borderColor: Colors.primary200,
+    borderStyle: 'dashed',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: Spacing.xs,
+  },
+  photoImage: {
+    width: 100,
+    height: 100,
+    borderRadius: BorderRadius.full,
+    borderWidth: 2,
+    borderColor: Colors.primary,
+  },
+  photoLabel: {
+    fontFamily: FontFamily.bodyMedium,
+    fontSize: FontSize.xs,
+    color: Colors.primary,
+  },
+  photoBadge: {
+    position: 'absolute',
+    bottom: 0,
+    right: 0,
+    width: 30,
+    height: 30,
+    borderRadius: BorderRadius.full,
+    backgroundColor: Colors.primary,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 2,
+    borderColor: Colors.white,
+  },
+  section: {
+    marginBottom: Spacing.xl,
+  },
+  sectionLabel: {
+    fontFamily: FontFamily.bodyMedium,
+    fontSize: FontSize.sm,
+    color: Colors.textSecondary,
+    marginBottom: Spacing.md,
+  },
+  roleGrid: {
+    flexDirection: 'row',
+    gap: Spacing.md,
+  },
+  roleCard: {
+    flex: 1,
+    backgroundColor: Colors.surface,
+    borderRadius: BorderRadius.lg,
+    borderWidth: 1.5,
+    borderColor: Colors.border,
+    padding: Spacing.base,
+    alignItems: 'center',
+    position: 'relative',
+    paddingTop: Spacing.xl,
+  },
+  roleCardSelected: {
+    borderColor: Colors.primary,
+    backgroundColor: Colors.primaryLight,
+  },
+  roleCheck: {
+    position: 'absolute',
+    top: Spacing.sm,
+    right: Spacing.sm,
+    width: 22,
+    height: 22,
+    borderRadius: BorderRadius.full,
+    borderWidth: 2,
+    borderColor: Colors.gray300,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: Colors.white,
+  },
+  roleCheckSelected: {
+    borderColor: Colors.primary,
+    backgroundColor: Colors.primary,
+  },
+  roleIcon: {
+    marginBottom: Spacing.sm,
+  },
+  roleTitle: {
+    fontFamily: FontFamily.headingSemiBold,
+    fontSize: FontSize.sm,
+    color: Colors.textPrimary,
+    textAlign: 'center',
+    marginBottom: Spacing.xs,
+  },
+  roleTitleSelected: {
+    color: Colors.primaryDeep,
+  },
+  roleSubtitle: {
+    fontFamily: FontFamily.body,
+    fontSize: FontSize.xs,
+    color: Colors.textMuted,
+    textAlign: 'center',
+    lineHeight: FontSize.xs * 1.6,
+  },
+  roleNote: {
+    fontFamily: FontFamily.body,
+    fontSize: FontSize.xs,
+    color: Colors.textDisabled,
+    textAlign: 'center',
+    marginTop: Spacing.sm,
+    lineHeight: FontSize.xs * 1.6,
+  },
+  errorBanner: {
+    backgroundColor: Colors.errorLight,
+    borderRadius: BorderRadius.md,
+    borderWidth: 1,
+    borderColor: Colors.error,
+    paddingHorizontal: Spacing.base,
+    paddingVertical: Spacing.sm,
+    marginBottom: Spacing.base,
+  },
+  errorText: {
+    fontFamily: FontFamily.body,
+    fontSize: FontSize.sm,
+    color: Colors.errorDark,
+  },
+  submitBtn: {
+    marginBottom: Spacing.base,
+  },
+  footerNote: {
+    textAlign: 'center',
+    paddingHorizontal: Spacing.base,
+  },
+});
